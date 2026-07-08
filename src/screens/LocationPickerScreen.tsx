@@ -7,6 +7,7 @@ import {
   StyleSheet,
   Text,
   View,
+  ViewStyle,
 } from 'react-native';
 import MapView, { Circle, Marker, PROVIDER_GOOGLE, Region } from 'react-native-maps';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -30,6 +31,16 @@ import { showAlert } from '@utils/alert';
 import type { RootStackScreenProps } from '@navigation/types';
 
 const MAP_DELTA = 0.02;
+
+const MAP_CONTROL_BACKDROP = {
+  light: '#e5e3df',
+  dark: '#242f3e',
+} as const;
+
+const mapControlBlockerStyle = (top: number, dark: boolean): ViewStyle => ({
+  top: top + 8,
+  backgroundColor: dark ? MAP_CONTROL_BACKDROP.dark : MAP_CONTROL_BACKDROP.light,
+});
 
 const regionFrom = (latitude: number, longitude: number): Region => ({
   latitude,
@@ -256,13 +267,7 @@ export const LocationPickerScreen: React.FC<RootStackScreenProps<'LocationPicker
 
       <View
         pointerEvents="auto"
-        style={[
-          styles.mapControlBlocker,
-          {
-            top: insets.top + 8,
-            backgroundColor: theme.dark ? '#242f3e' : '#e5e3df',
-          },
-        ]}
+        style={[styles.mapControlBlocker, mapControlBlockerStyle(insets.top, theme.dark)]}
       />
 
       <View pointerEvents="box-none" style={[styles.searchOverlay, { top: insets.top + 8 }]}>
