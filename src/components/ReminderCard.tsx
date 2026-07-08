@@ -1,9 +1,10 @@
 import React from 'react';
-import { StyleSheet, Switch, Text, View } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
 import { useTheme } from '@theme';
 import { Reminder } from '@types';
 import { getCategoryMeta, STATUS_COLORS, STATUS_LABELS } from '@constants';
 import { formatRadius } from '@utils';
+import { AppSwitch } from './AppSwitch';
 import { Card } from './Card';
 import { Icon } from './Icon';
 
@@ -51,11 +52,9 @@ export const ReminderCard: React.FC<ReminderCardProps> = ({
             </Text>
           ) : null}
         </View>
-        <Switch
+        <AppSwitch
           value={reminder.enabled}
           onValueChange={onToggleEnabled}
-          trackColor={{ true: theme.colors.primary, false: theme.colors.outline }}
-          thumbColor={theme.colors.surface}
         />
       </View>
 

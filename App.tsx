@@ -3,18 +3,27 @@ import { StatusBar } from 'react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { Provider } from 'react-redux';
-import { store } from '@store';
+import { store, setOnboarded } from '@store';
 import { ThemeProvider, useTheme } from '@theme';
 import { RootNavigator } from '@navigation';
-import { syncGeofences } from '@services';
-import { useAppSelector } from '@hooks';
+import { syncGeofences, warmUpLocation } from '@services';
+import { useAppDispatch, useAppSelector } from '@hooks';
+import { AppAlertProvider, PermissionsOnboarding } from '@components';
 
 const ThemedApp: React.FC = () => {
   const theme = useTheme();
+  const dispatch = useAppDispatch();
+  const onboarded = useAppSelector(state => state.settings.onboarded);
 
   useEffect(() => {
     syncGeofences().catch(() => undefined);
   }, []);
+
+  useEffect(() => {
+    if (onboarded) {
+      warmUpLocation().catch(() => undefined);
+    }
+  }, [onboarded]);
 
   return (
     <>
@@ -24,6 +33,10 @@ const ThemedApp: React.FC = () => {
         translucent
       />
       <RootNavigator />
+      <AppAlertProvider />
+      {!onboarded ? (
+        <PermissionsOnboarding onComplete={() => dispatch(setOnboarded(true))} />
+      ) : null}
     </>
   );
 };

@@ -15,11 +15,9 @@ import {
   requestForegroundLocation,
   requestNotifications,
 } from '@services';
-import { NOTIFICATION_SOUNDS } from '@constants';
+import { NOTIFICATION_SOUNDS, APP_NAME, APP_PRIVACY_NOTE, APP_TAGLINE, APP_VERSION, PERMISSION_STATE_LABELS } from '@constants';
 import { Card, Chip, Icon } from '@components';
 import type { MainTabScreenProps } from '@navigation/types';
-
-const APP_VERSION = '0.1.0';
 
 export const SettingsScreen: React.FC<MainTabScreenProps<'Settings'>> = () => {
   const theme = useTheme();
@@ -203,28 +201,20 @@ export const SettingsScreen: React.FC<MainTabScreenProps<'Settings'>> = () => {
             <Icon name="map-marker-radius" size={22} color={theme.colors.primary} />
             <View style={styles.aboutText}>
               <Text style={[theme.typography.titleMedium, { color: theme.colors.onSurface }]}>
-                Plarem
+                {APP_NAME}
               </Text>
               <Text style={[theme.typography.bodySmall, { color: theme.colors.onSurfaceVariant }]}>
-                Play a Reminder on Arrival — v{APP_VERSION}
+                {APP_TAGLINE} — v{APP_VERSION}
               </Text>
             </View>
           </View>
           <Text style={[theme.typography.bodySmall, { color: theme.colors.onSurfaceVariant }]}>
-            Reminders are stored locally on this device. Location is only used on-device to
-            trigger geofences; nothing is uploaded.
+            {APP_PRIVACY_NOTE}
           </Text>
         </Card>
       </View>
     </ScrollView>
   );
-};
-
-const PERMISSION_STATE_LABELS: Record<PermissionState, string> = {
-  granted: 'Granted',
-  denied: 'Tap to grant',
-  blocked: 'Blocked — tap to open settings',
-  unavailable: 'Unavailable',
 };
 
 const PermissionRow: React.FC<{

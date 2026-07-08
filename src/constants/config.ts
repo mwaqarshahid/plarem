@@ -1,4 +1,17 @@
+import type { Region } from 'react-native-maps';
 import { GOOGLE_MAPS_API_KEY as GENERATED_GOOGLE_MAPS_API_KEY } from './env.generated';
+
+/** Keep in sync with package.json version. */
+export const APP_VERSION = '0.0.1';
+
+export const APP_NAME = 'Plarem';
+
+export const APP_TAGLINE = 'Play a Reminder on Arrival';
+
+export const APP_MOTTO = 'Arrive. Remember.';
+
+export const APP_PRIVACY_NOTE =
+  'Reminders are stored locally on this device. Location is only used on-device to trigger geofences; nothing is uploaded.';
 
 /**
  * Google Maps Platform API key for Places search and Geocoding HTTP calls.
@@ -7,7 +20,21 @@ import { GOOGLE_MAPS_API_KEY as GENERATED_GOOGLE_MAPS_API_KEY } from './env.gene
  */
 export const GOOGLE_MAPS_API_KEY = GENERATED_GOOGLE_MAPS_API_KEY?.trim() ?? '';
 
-export const APP_NAME = 'Plarem';
-
 /** Android notification channel for geofence reminders. */
 export const REMINDER_CHANNEL_ID = 'plarem-reminders';
+
+export const PERMISSION_STATE_LABELS = {
+  granted: 'Granted',
+  denied: 'Tap to grant',
+  blocked: 'Blocked — tap to open settings',
+  unavailable: 'Unavailable',
+} as const satisfies Record<string, string>;
+
+export type PermissionLabelState = keyof typeof PERMISSION_STATE_LABELS;
+
+export const DEFAULT_MAP_REGION: Region = {
+  latitude: 24.8607,
+  longitude: 67.0011,
+  latitudeDelta: 0.05,
+  longitudeDelta: 0.05,
+};

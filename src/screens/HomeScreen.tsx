@@ -4,7 +4,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useTheme } from '@theme';
 import { useAppDispatch, useAppSelector } from '@hooks';
 import { FilterId, filterReminders, selectReminders, updateReminder } from '@store';
-import { Coordinates, getCurrentPosition } from '@services';
+import { Coordinates, getCachedLocation, warmUpLocation } from '@services';
 import { Chip, EmptyState, Icon, ReminderCard, TextField } from '@components';
 import type { MainTabScreenProps } from '@navigation/types';
 
@@ -33,8 +33,13 @@ export const HomeScreen: React.FC<MainTabScreenProps<'Home'>> = ({ navigation })
 
   useEffect(() => {
     if (filter === 'nearby' && !userLocation) {
-      getCurrentPosition()
-        .then(setUserLocation)
+      const cached = getCachedLocation();
+      if (cached) {
+        setUserLocation(cached);
+        return;
+      }
+      warmUpLocation()
+        .then(position => setUserLocation(position))
         .catch(() => setUserLocation(undefined));
     }
   }, [filter, userLocation]);

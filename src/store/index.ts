@@ -16,7 +16,7 @@ const loadPreloadedState = ():
     reminders: { items: reminders ?? [] },
     settings: {
       themePreference: settings?.themePreference ?? 'system',
-      onboarded: settings?.onboarded ?? false,
+      onboarded: settings?.onboarded ?? Boolean(settings),
       notificationSound: settings?.notificationSound ?? 'default',
     },
   };

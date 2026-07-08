@@ -1,4 +1,7 @@
 export * from './Icon';
+export * from './AppSwitch';
+export * from './AppAlertProvider';
+export * from './PermissionsOnboarding';
 export * from './Button';
 export * from './Chip';
 export * from './Card';

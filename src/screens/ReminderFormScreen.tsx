@@ -1,5 +1,5 @@
 import React, { useCallback, useState } from 'react';
-import { Alert, ScrollView, StyleSheet, Switch, Text, View } from 'react-native';
+import { ScrollView, StyleSheet, Text, View } from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
 import { useTheme } from '@theme';
 import { useAppDispatch, useAppSelector } from '@hooks';
@@ -10,7 +10,7 @@ import {
   requestForegroundLocation,
   requestNotifications,
 } from '@services';
-import { Button, Card, Chip, Icon, TextField } from '@components';
+import { AppSwitch, Button, Card, Chip, Icon, TextField } from '@components';
 import {
   CATEGORIES,
   NOTIFICATION_SOUNDS,
@@ -19,6 +19,7 @@ import {
 } from '@constants';
 import { CategoryId, ReminderPriority, ReminderRepeat } from '@types';
 import { formatRadius } from '@utils';
+import { showAlert } from '@utils/alert';
 import type { RootStackScreenProps } from '@navigation/types';
 
 export const ReminderFormScreen: React.FC<RootStackScreenProps<'ReminderForm'>> = ({
@@ -69,7 +70,7 @@ export const ReminderFormScreen: React.FC<RootStackScreenProps<'ReminderForm'>> 
   const ensurePermissions = async (): Promise<boolean> => {
     const fg = await requestForegroundLocation();
     if (fg !== 'granted') {
-      Alert.alert(
+      showAlert(
         'Location required',
         'Plarem needs location access to detect when you arrive at a place.',
       );
@@ -77,7 +78,7 @@ export const ReminderFormScreen: React.FC<RootStackScreenProps<'ReminderForm'>> 
     }
     const bg = await requestBackgroundLocation();
     if (bg !== 'granted') {
-      Alert.alert(
+      showAlert(
         'Background location recommended',
         'Without "Allow all the time" location access, reminders will not trigger while the app is closed.',
       );
@@ -94,7 +95,7 @@ export const ReminderFormScreen: React.FC<RootStackScreenProps<'ReminderForm'>> 
       return;
     }
     if (!location) {
-      Alert.alert('Location missing', 'Choose where this reminder should trigger.');
+      showAlert('Location missing', 'Choose where this reminder should trigger.');
       return;
     }
 
@@ -297,11 +298,9 @@ export const ReminderFormScreen: React.FC<RootStackScreenProps<'ReminderForm'>> 
             Monitoring starts as soon as you save
           </Text>
         </View>
-        <Switch
+        <AppSwitch
           value={enabled}
           onValueChange={setEnabled}
-          trackColor={{ true: theme.colors.primary, false: theme.colors.outline }}
-          thumbColor={theme.colors.surface}
         />
       </Card>
 

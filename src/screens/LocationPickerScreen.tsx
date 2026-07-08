@@ -1,7 +1,6 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import {
   ActivityIndicator,
-  Alert,
   FlatList,
   Keyboard,
   Pressable,
@@ -14,22 +13,40 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useTheme } from '@theme';
 import { Button, Chip, Icon, TextField } from '@components';
 import {
+  getCachedLocation,
   getCurrentPosition,
+  getCurrentPositionFast,
   PlaceSuggestion,
   requestForegroundLocation,
   reverseGeocode,
   searchPlaces,
+  setCachedLocation,
+  warmUpLocation,
 } from '@services';
 import type { Coordinates } from '@services';
-import { DEFAULT_RADIUS_METERS, GOOGLE_MAPS_API_KEY, RADIUS_PRESETS } from '@constants';
+import { DEFAULT_MAP_REGION, DEFAULT_RADIUS_METERS, GOOGLE_MAPS_API_KEY, RADIUS_PRESETS } from '@constants';
 import { ReminderLocation } from '@types';
+import { showAlert } from '@utils/alert';
 import type { RootStackScreenProps } from '@navigation/types';
 
-const DEFAULT_REGION: Region = {
-  latitude: 24.8607,
-  longitude: 67.0011,
-  latitudeDelta: 0.05,
-  longitudeDelta: 0.05,
+const MAP_DELTA = 0.02;
+
+const regionFrom = (latitude: number, longitude: number): Region => ({
+  latitude,
+  longitude,
+  latitudeDelta: MAP_DELTA,
+  longitudeDelta: MAP_DELTA,
+});
+
+const resolveStartRegion = (initial?: ReminderLocation): Region => {
+  if (initial) {
+    return regionFrom(initial.latitude, initial.longitude);
+  }
+  const cached = getCachedLocation();
+  if (cached) {
+    return regionFrom(cached.latitude, cached.longitude);
+  }
+  return DEFAULT_MAP_REGION;
 };
 
 export const LocationPickerScreen: React.FC<RootStackScreenProps<'LocationPicker'>> = ({
@@ -42,25 +59,19 @@ export const LocationPickerScreen: React.FC<RootStackScreenProps<'LocationPicker
 
   const initial = route.params?.initial;
   const [selection, setSelection] = useState<ReminderLocation | undefined>(initial);
-  const [initialRegion, setInitialRegion] = useState<Region | undefined>(
-    initial
-      ? {
-          latitude: initial.latitude,
-          longitude: initial.longitude,
-          latitudeDelta: 0.02,
-          longitudeDelta: 0.02,
-        }
-      : undefined,
-  );
+  const [mapRegion] = useState<Region>(() => resolveStartRegion(initial));
   const [radius, setRadius] = useState(route.params?.initialRadius ?? DEFAULT_RADIUS_METERS);
   const [query, setQuery] = useState('');
   const [suggestions, setSuggestions] = useState<PlaceSuggestion[]>([]);
   const [searching, setSearching] = useState(false);
   const [resolving, setResolving] = useState(false);
+  const [locating, setLocating] = useState(false);
+  const [centeringMap, setCenteringMap] = useState(!initial && !getCachedLocation());
+  const userLocationRef = useRef<Coordinates | undefined>(getCachedLocation());
 
   useEffect(() => {
     if (!GOOGLE_MAPS_API_KEY) {
-      Alert.alert(
+      showAlert(
         'Google Maps API key missing',
         'Copy .env.example to .env, add GOOGLE_MAPS_API_KEY, then run npm run android to rebuild.',
       );
@@ -68,10 +79,7 @@ export const LocationPickerScreen: React.FC<RootStackScreenProps<'LocationPicker
   }, []);
 
   const animateTo = useCallback((latitude: number, longitude: number) => {
-    mapRef.current?.animateToRegion(
-      { latitude, longitude, latitudeDelta: 0.02, longitudeDelta: 0.02 },
-      400,
-    );
+    mapRef.current?.animateToRegion(regionFrom(latitude, longitude), 400);
   }, []);
 
   const selectCoordinate = useCallback(
@@ -100,32 +108,27 @@ export const LocationPickerScreen: React.FC<RootStackScreenProps<'LocationPicker
     [animateTo],
   );
 
-  // Resolve the user's position before the first map render so the map
-  // opens centered on them instead of jumping there from the default region.
+  // Refine map center in the background using a warmed/cached fix.
   useEffect(() => {
     if (initial) {
       return;
     }
+    let cancelled = false;
     (async () => {
-      try {
-        const state = await requestForegroundLocation();
-        if (state === 'granted') {
-          const position = await getCurrentPosition().catch(() => getCurrentPosition(false));
-          userLocationRef.current = position;
-          setInitialRegion({
-            latitude: position.latitude,
-            longitude: position.longitude,
-            latitudeDelta: 0.02,
-            longitudeDelta: 0.02,
-          });
-          return;
-        }
-      } catch {
-        // Fall through to the default region below.
+      const position = (await warmUpLocation()) ?? getCachedLocation();
+      if (cancelled || !position) {
+        setCenteringMap(false);
+        return;
       }
-      setInitialRegion(DEFAULT_REGION);
+      userLocationRef.current = position;
+      setCachedLocation(position);
+      animateTo(position.latitude, position.longitude);
+      setCenteringMap(false);
     })();
-  }, [initial]);
+    return () => {
+      cancelled = true;
+    };
+  }, [animateTo, initial]);
 
   useEffect(() => {
     const term = query.trim();
@@ -147,13 +150,10 @@ export const LocationPickerScreen: React.FC<RootStackScreenProps<'LocationPicker
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [query]);
 
-  const [locating, setLocating] = useState(false);
-  const userLocationRef = useRef<Coordinates | undefined>(undefined);
-
   const useCurrentLocation = async (): Promise<void> => {
     const state = await requestForegroundLocation();
     if (state !== 'granted') {
-      Alert.alert(
+      showAlert(
         'Location permission required',
         'Allow location access to use your current position, or tap the map to drop a pin.',
       );
@@ -161,16 +161,18 @@ export const LocationPickerScreen: React.FC<RootStackScreenProps<'LocationPicker
     }
     setLocating(true);
     try {
-      // Prefer a fresh GPS/network fix; fall back to the last known fix from startup.
       const position =
-        (await getCurrentPosition().catch(() => getCurrentPosition(false)).catch(() => undefined)) ??
-        userLocationRef.current;
+        (await getCurrentPositionFast().catch(() => getCurrentPosition(true)).catch(() => undefined)) ??
+        userLocationRef.current ??
+        getCachedLocation();
       if (!position) {
         throw new Error('Location unavailable');
       }
+      userLocationRef.current = position;
+      setCachedLocation(position);
       await selectCoordinate(position.latitude, position.longitude);
     } catch {
-      Alert.alert(
+      showAlert(
         'Location unavailable',
         'Could not determine your current position. Tap the map to drop a pin instead.',
       );
@@ -183,8 +185,6 @@ export const LocationPickerScreen: React.FC<RootStackScreenProps<'LocationPicker
     if (!selection) {
       return;
     }
-    // popTo returns to the existing ReminderForm entry (keeping its params,
-    // e.g. reminderId) instead of pushing a duplicate form on the stack.
     navigation.popTo(
       'ReminderForm',
       { pickedLocation: selection, pickedRadius: radius },
@@ -194,55 +194,65 @@ export const LocationPickerScreen: React.FC<RootStackScreenProps<'LocationPicker
 
   return (
     <View style={[styles.container, { backgroundColor: theme.colors.background }]}>
-      {initialRegion ? (
-        <MapView
-          ref={mapRef}
-          provider={PROVIDER_GOOGLE}
-          style={StyleSheet.absoluteFill}
-          initialRegion={initialRegion}
-          showsUserLocation={false}
-          showsMyLocationButton={false}
-          toolbarEnabled={false}
-          showsCompass={false}
-          zoomControlEnabled={false}
-          rotateEnabled={false}
-          mapPadding={{ top: insets.top + 72, right: 16, bottom: 260, left: 16 }}
-          onPress={event => {
-            const { latitude, longitude } = event.nativeEvent.coordinate;
-            selectCoordinate(latitude, longitude);
-          }}
-          onPoiClick={event => {
-            const { coordinate, name } = event.nativeEvent;
-            selectCoordinate(coordinate.latitude, coordinate.longitude, name);
-          }}>
-          {selection ? (
-            <>
-              <Marker
-                coordinate={{ latitude: selection.latitude, longitude: selection.longitude }}
-                draggable
-                onDragEnd={event => {
-                  const { latitude, longitude } = event.nativeEvent.coordinate;
-                  selectCoordinate(latitude, longitude);
-                }}
-              />
-              <Circle
-                center={{ latitude: selection.latitude, longitude: selection.longitude }}
-                radius={radius}
-                strokeColor={theme.colors.primary}
-                fillColor={theme.dark ? 'rgba(155,163,255,0.18)' : 'rgba(79,91,232,0.15)'}
-                strokeWidth={2}
-              />
-            </>
-          ) : null}
-        </MapView>
-      ) : (
-        <View style={[StyleSheet.absoluteFill, styles.mapLoading]}>
-          <ActivityIndicator size="large" color={theme.colors.primary} />
-          <Text style={[theme.typography.bodyMedium, { color: theme.colors.onSurfaceVariant }]}>
-            Finding your location…
+      <MapView
+        ref={mapRef}
+        provider={PROVIDER_GOOGLE}
+        style={StyleSheet.absoluteFill}
+        initialRegion={mapRegion}
+        userInterfaceStyle={theme.dark ? 'dark' : 'light'}
+        showsUserLocation={false}
+        showsMyLocationButton={false}
+        toolbarEnabled={false}
+        showsCompass={false}
+        zoomControlEnabled={false}
+        rotateEnabled={false}
+        mapPadding={{ top: insets.top + 72, right: 16, bottom: 260, left: 16 }}
+        onPress={event => {
+          const { latitude, longitude } = event.nativeEvent.coordinate;
+          selectCoordinate(latitude, longitude);
+        }}
+        onPoiClick={event => {
+          const { coordinate, name } = event.nativeEvent;
+          selectCoordinate(coordinate.latitude, coordinate.longitude, name);
+        }}>
+        {selection ? (
+          <>
+            <Marker
+              coordinate={{ latitude: selection.latitude, longitude: selection.longitude }}
+              draggable
+              onDragEnd={event => {
+                const { latitude, longitude } = event.nativeEvent.coordinate;
+                selectCoordinate(latitude, longitude);
+              }}
+            />
+            <Circle
+              center={{ latitude: selection.latitude, longitude: selection.longitude }}
+              radius={radius}
+              strokeColor={theme.colors.primary}
+              fillColor={theme.dark ? 'rgba(155,163,255,0.18)' : 'rgba(79,91,232,0.15)'}
+              strokeWidth={2}
+            />
+          </>
+        ) : null}
+      </MapView>
+
+      {centeringMap ? (
+        <View
+          pointerEvents="none"
+          style={[
+            styles.centeringBadge,
+            {
+              top: insets.top + 64,
+              backgroundColor: theme.colors.surface,
+              borderRadius: theme.radius.pill,
+            },
+          ]}>
+          <ActivityIndicator size="small" color={theme.colors.primary} />
+          <Text style={[theme.typography.labelSmall, { color: theme.colors.onSurfaceVariant }]}>
+            Centering on your location…
           </Text>
         </View>
-      )}
+      ) : null}
 
       <View
         pointerEvents="auto"
@@ -255,9 +265,7 @@ export const LocationPickerScreen: React.FC<RootStackScreenProps<'LocationPicker
         ]}
       />
 
-      <View
-        pointerEvents="box-none"
-        style={[styles.searchOverlay, { top: insets.top + 8 }]}>
+      <View pointerEvents="box-none" style={[styles.searchOverlay, { top: insets.top + 8 }]}>
         <View style={styles.searchRow}>
           <Pressable
             onPress={() => navigation.goBack()}
@@ -346,10 +354,10 @@ export const LocationPickerScreen: React.FC<RootStackScreenProps<'LocationPicker
             {resolving
               ? 'Resolving address…'
               : selection
-              ? selection.placeName
-                ? `${selection.placeName} — ${selection.address}`
-                : selection.address
-              : 'Tap the map, search or use your current location.'}
+                ? selection.placeName
+                  ? `${selection.placeName} — ${selection.address}`
+                  : selection.address
+                : 'Tap the map, search or use your current location.'}
           </Text>
         </View>
 
@@ -390,10 +398,16 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
-  mapLoading: {
+  centeringBadge: {
+    position: 'absolute',
+    alignSelf: 'center',
+    flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'center',
-    gap: 12,
+    gap: 8,
+    paddingHorizontal: 14,
+    paddingVertical: 8,
+    zIndex: 2,
+    elevation: 4,
   },
   searchOverlay: {
     position: 'absolute',

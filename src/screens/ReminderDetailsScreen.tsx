@@ -1,5 +1,5 @@
 import React from 'react';
-import { Alert, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { ScrollView, StyleSheet, Text, View } from 'react-native';
 import MapView, { Circle, Marker, PROVIDER_GOOGLE } from 'react-native-maps';
 import { useTheme } from '@theme';
 import { useAppDispatch, useAppSelector } from '@hooks';
@@ -7,6 +7,7 @@ import { deleteReminder, setReminderStatus } from '@store';
 import { Button, Card, EmptyState, Icon } from '@components';
 import { getCategoryMeta, STATUS_COLORS, STATUS_LABELS } from '@constants';
 import { formatRadius, formatRelativeTime } from '@utils';
+import { showAlert } from '@utils/alert';
 import type { RootStackScreenProps } from '@navigation/types';
 
 export const ReminderDetailsScreen: React.FC<RootStackScreenProps<'ReminderDetails'>> = ({
@@ -35,7 +36,7 @@ export const ReminderDetailsScreen: React.FC<RootStackScreenProps<'ReminderDetai
   const statusColor = STATUS_COLORS[reminder.status];
 
   const handleDelete = (): void => {
-    Alert.alert('Delete reminder', `Delete "${reminder.title}" permanently?`, [
+    showAlert('Delete reminder', `Delete "${reminder.title}" permanently?`, [
       { text: 'Cancel', style: 'cancel' },
       {
         text: 'Delete',
@@ -57,6 +58,7 @@ export const ReminderDetailsScreen: React.FC<RootStackScreenProps<'ReminderDetai
           provider={PROVIDER_GOOGLE}
           style={styles.map}
           pointerEvents="none"
+          userInterfaceStyle={theme.dark ? 'dark' : 'light'}
           initialRegion={{
             latitude: reminder.location.latitude,
             longitude: reminder.location.longitude,

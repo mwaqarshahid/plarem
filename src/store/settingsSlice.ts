@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { ThemePreference } from '@theme';
-import { NotificationSoundId } from '@constants';
+import type { NotificationSoundId } from '@constants/reminders';
 
 export interface SettingsState {
   themePreference: ThemePreference;

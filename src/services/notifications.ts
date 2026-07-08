@@ -1,5 +1,6 @@
 import notifee, { AndroidImportance, EventType } from '@notifee/react-native';
-import { NOTIFICATION_SOUNDS, NotificationSoundId, REMINDER_CHANNEL_ID } from '@constants';
+import { REMINDER_CHANNEL_ID } from '@constants/config';
+import { NOTIFICATION_SOUNDS, type NotificationSoundId } from '@constants/reminders';
 import { Reminder } from '@types';
 
 const SOUND_LABELS: Record<NotificationSoundId, string> = {
@@ -50,7 +51,7 @@ export const showArrivalNotification = async (reminder: Reminder): Promise<void>
     data: { reminderId: reminder.id },
     android: {
       channelId,
-      smallIcon: 'ic_launcher',
+      smallIcon: 'ic_notification',
       pressAction: { id: 'default' },
       importance: AndroidImportance.HIGH,
       showTimestamp: true,
@@ -71,7 +72,7 @@ export const previewNotificationSound = async (sound: NotificationSoundId): Prom
     body: 'This is how arrival reminders will sound.',
     android: {
       channelId,
-      smallIcon: 'ic_launcher',
+      smallIcon: 'ic_notification',
       pressAction: { id: 'default' },
       importance: AndroidImportance.HIGH,
     },
