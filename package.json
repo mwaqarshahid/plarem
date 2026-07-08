@@ -10,7 +10,9 @@
     "brand:generate": "node scripts/generate-brand-assets.js",
     "test": "jest",
     "test:watch": "jest --watch",
-    "test:coverage": "jest --coverage"
+    "test:coverage": "jest --coverage",
+    "typecheck": "tsc --noEmit",
+    "ci": "node scripts/sync-env.js && npm run lint && npm run typecheck && npm test -- --ci"
   },
   "dependencies": {
     "@notifee/react-native": "^9.1.8",

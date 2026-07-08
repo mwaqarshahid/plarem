@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import { Modal, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { Modal, ScrollView, StyleSheet, Text, View, ViewStyle } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { useTheme } from '@theme';
+import { useTheme, type ThemeColors } from '@theme';
 import {
   requestBackgroundLocation,
   requestForegroundLocation,
@@ -20,6 +20,11 @@ interface PermissionsOnboardingProps {
 }
 
 const STEPS: Step[] = ['welcome', 'location', 'background', 'notifications'];
+
+const stepDotStyle = (active: boolean, colors: ThemeColors): ViewStyle => ({
+  backgroundColor: active ? colors.primary : colors.outline,
+  opacity: active ? 1 : 0.45,
+});
 
 export const PermissionsOnboarding: React.FC<PermissionsOnboardingProps> = ({ onComplete }) => {
   const theme = useTheme();
@@ -190,14 +195,7 @@ export const PermissionsOnboarding: React.FC<PermissionsOnboardingProps> = ({ on
             {STEPS.map((item, index) => (
               <View
                 key={item}
-                style={[
-                  styles.dot,
-                  {
-                    backgroundColor:
-                      index === stepIndex ? theme.colors.primary : theme.colors.outline,
-                    opacity: index === stepIndex ? 1 : 0.45,
-                  },
-                ]}
+                style={[styles.dot, stepDotStyle(index === stepIndex, theme.colors)]}
               />
             ))}
           </View>
