@@ -8,7 +8,9 @@
     "lint": "eslint .",
     "start": "node scripts/start-metro.js",
     "brand:generate": "node scripts/generate-brand-assets.js",
-    "test": "jest"
+    "test": "jest",
+    "typecheck": "tsc --noEmit",
+    "ci": "node scripts/sync-env.js && npm run lint && npm run typecheck && npm test -- --ci"
   },
   "dependencies": {
     "@notifee/react-native": "^9.1.8",
