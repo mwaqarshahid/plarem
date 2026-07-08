@@ -73,20 +73,27 @@ def enableProguardInReleaseBuilds = false
 def jscFlavor = 'io.github.react-native-community:jsc-android:2026004.+'
 
 def resolveGoogleMapsApiKey() {
-    def stdout = new ByteArrayOutputStream()
-    try {
-        rootProject.exec {
-            workingDir rootProject.projectDir.parentFile
-            commandLine "node", "scripts/load-env.js", "GOOGLE_MAPS_API_KEY"
-            standardOutput = stdout
-            ignoreExitValue true
+    // Parse the project root .env directly; exec'ing node here is unreliable on Windows.
+    def envFile = new File(rootProject.projectDir.parentFile, ".env")
+    if (envFile.exists()) {
+        for (line in envFile.readLines()) {
+            def trimmed = line.trim()
+            if (trimmed.startsWith("#") || !trimmed.contains("=")) {
+                continue
+            }
+            def idx = trimmed.indexOf("=")
+            def name = trimmed.substring(0, idx).trim()
+            if (name == "GOOGLE_MAPS_API_KEY") {
+                def value = trimmed.substring(idx + 1).trim()
+                if ((value.startsWith('"') && value.endsWith('"')) ||
+                    (value.startsWith("'") && value.endsWith("'"))) {
+                    value = value.substring(1, value.length() - 1)
+                }
+                if (!value.isEmpty()) {
+                    return value
+                }
+            }
         }
-    } catch (Exception ignored) {
-        // Gradle sync can run before node is on PATH in some IDE setups.
-    }
-    def fromEnvFile = stdout.toString().trim()
-    if (!fromEnvFile.isEmpty()) {
-        return fromEnvFile
     }
     return project.findProperty("GOOGLE_MAPS_API_KEY") ?: ""
 }

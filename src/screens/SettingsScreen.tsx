@@ -1,16 +1,21 @@
-import React, { useCallback, useState } from 'react';
-import { ScrollView, StyleSheet, Text, View } from 'react-native';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
+import { AppState, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
 import { useTheme } from '@theme';
 import { useAppDispatch, useAppSelector } from '@hooks';
-import { setThemePreference } from '@store';
+import { setNotificationSound, setThemePreference } from '@store';
 import {
   checkBackgroundLocation,
   checkForegroundLocation,
   checkNotifications,
   openAppSettings,
   PermissionState,
+  previewNotificationSound,
+  requestBackgroundLocation,
+  requestForegroundLocation,
+  requestNotifications,
 } from '@services';
+import { NOTIFICATION_SOUNDS } from '@constants';
 import { Card, Chip, Icon } from '@components';
 import type { MainTabScreenProps } from '@navigation/types';
 
@@ -20,31 +25,78 @@ export const SettingsScreen: React.FC<MainTabScreenProps<'Settings'>> = () => {
   const theme = useTheme();
   const dispatch = useAppDispatch();
   const themePreference = useAppSelector(state => state.settings.themePreference);
+  const notificationSound = useAppSelector(state => state.settings.notificationSound);
 
   const [locationState, setLocationState] = useState<PermissionState>('denied');
   const [backgroundState, setBackgroundState] = useState<PermissionState>('denied');
   const [notificationState, setNotificationState] = useState<PermissionState>('denied');
+  const mounted = useRef(true);
 
+  const refreshPermissions = useCallback(async () => {
+    const [fg, bg, notif] = await Promise.all([
+      checkForegroundLocation(),
+      checkBackgroundLocation(),
+      checkNotifications(),
+    ]);
+    if (mounted.current) {
+      setLocationState(fg);
+      setBackgroundState(bg);
+      setNotificationState(notif);
+    }
+  }, []);
+
+  useEffect(() => {
+    mounted.current = true;
+    return () => {
+      mounted.current = false;
+    };
+  }, []);
+
+  // Re-check when the tab gains focus.
   useFocusEffect(
     useCallback(() => {
-      let active = true;
-      (async () => {
-        const [fg, bg, notif] = await Promise.all([
-          checkForegroundLocation(),
-          checkBackgroundLocation(),
-          checkNotifications(),
-        ]);
-        if (active) {
-          setLocationState(fg);
-          setBackgroundState(bg);
-          setNotificationState(notif);
-        }
-      })();
-      return () => {
-        active = false;
-      };
-    }, []),
+      refreshPermissions();
+    }, [refreshPermissions]),
   );
+
+  // Re-check when returning from system settings or a permission dialog.
+  useEffect(() => {
+    const subscription = AppState.addEventListener('change', state => {
+      if (state === 'active') {
+        refreshPermissions();
+      }
+    });
+    return () => subscription.remove();
+  }, [refreshPermissions]);
+
+  const grantLocation = async (): Promise<void> => {
+    const result = await requestForegroundLocation();
+    if (result === 'blocked') {
+      openAppSettings();
+    }
+    refreshPermissions();
+  };
+
+  const grantBackgroundLocation = async (): Promise<void> => {
+    if ((await checkForegroundLocation()) !== 'granted') {
+      await requestForegroundLocation();
+    }
+    const result = await requestBackgroundLocation();
+    if (result === 'blocked') {
+      openAppSettings();
+    }
+    refreshPermissions();
+  };
+
+  const grantNotifications = async (): Promise<void> => {
+    const result = await requestNotifications();
+    if (result === 'denied') {
+      // Notifee returns 'denied' both for a fresh denial and a permanent one;
+      // system settings is the reliable path either way on re-request.
+      openAppSettings();
+    }
+    refreshPermissions();
+  };
 
   return (
     <ScrollView
@@ -63,17 +115,53 @@ export const SettingsScreen: React.FC<MainTabScreenProps<'Settings'>> = () => {
             icon="map-marker-outline"
             label="Location"
             state={locationState}
+            onGrant={grantLocation}
           />
           <PermissionRow
             icon="map-marker-radius-outline"
             label="Background location"
             state={backgroundState}
+            onGrant={grantBackgroundLocation}
           />
-          <PermissionRow icon="bell-outline" label="Notifications" state={notificationState} />
+          <PermissionRow
+            icon="bell-outline"
+            label="Notifications"
+            state={notificationState}
+            onGrant={grantNotifications}
+          />
           <Text
             onPress={openAppSettings}
             style={[theme.typography.labelLarge, styles.settingsLink, { color: theme.colors.primary }]}>
             Open system settings
+          </Text>
+        </Card>
+      </View>
+
+      <View style={styles.section}>
+        <Text style={[theme.typography.labelLarge, { color: theme.colors.onSurfaceVariant }]}>
+          Notifications
+        </Text>
+        <Card style={styles.cardList}>
+          <Text style={[theme.typography.bodyMedium, { color: theme.colors.onSurface }]}>
+            Tone for arrival reminders
+          </Text>
+          <View style={styles.chipRow}>
+            {NOTIFICATION_SOUNDS.map(sound => (
+              <Chip
+                key={sound.id}
+                label={sound.label}
+                icon={notificationSound === sound.id ? 'volume-high' : 'music-note-outline'}
+                selected={notificationSound === sound.id}
+                onPress={() => {
+                  dispatch(setNotificationSound(sound.id));
+                  previewNotificationSound(sound.id);
+                }}
+              />
+            ))}
+          </View>
+          <Text style={[theme.typography.bodySmall, { color: theme.colors.onSurfaceVariant }]}>
+            Tapping a tone plays a preview. New reminders use this tone by default; each
+            reminder can still override it.
           </Text>
         </Card>
       </View>
@@ -132,16 +220,27 @@ export const SettingsScreen: React.FC<MainTabScreenProps<'Settings'>> = () => {
   );
 };
 
+const PERMISSION_STATE_LABELS: Record<PermissionState, string> = {
+  granted: 'Granted',
+  denied: 'Tap to grant',
+  blocked: 'Blocked — tap to open settings',
+  unavailable: 'Unavailable',
+};
+
 const PermissionRow: React.FC<{
   icon: string;
   label: string;
   state: PermissionState;
-}> = ({ icon, label, state }) => {
+  onGrant: () => void;
+}> = ({ icon, label, state, onGrant }) => {
   const theme = useTheme();
   const granted = state === 'granted';
   const color = granted ? theme.colors.success : theme.colors.warning;
   return (
-    <View style={styles.permissionRow}>
+    <Pressable
+      onPress={granted ? undefined : onGrant}
+      android_ripple={granted ? undefined : { color: theme.colors.ripple }}
+      style={styles.permissionRow}>
       <Icon name={icon} size={20} color={theme.colors.onSurfaceVariant} />
       <Text
         style={[theme.typography.bodyMedium, styles.permissionLabel, { color: theme.colors.onSurface }]}>
@@ -154,10 +253,10 @@ const PermissionRow: React.FC<{
           color={color}
         />
         <Text style={[theme.typography.labelSmall, { color }]}>
-          {granted ? 'Granted' : 'Not granted'}
+          {PERMISSION_STATE_LABELS[state]}
         </Text>
       </View>
-    </View>
+    </Pressable>
   );
 };
 

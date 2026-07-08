@@ -1,25 +1,45 @@
 import notifee, { AndroidImportance, EventType } from '@notifee/react-native';
-import { REMINDER_CHANNEL_ID } from '@constants';
+import { NOTIFICATION_SOUNDS, NotificationSoundId, REMINDER_CHANNEL_ID } from '@constants';
 import { Reminder } from '@types';
 
-let channelCreated = false;
+const SOUND_LABELS: Record<NotificationSoundId, string> = {
+  default: 'Default',
+  chime: 'Chime',
+  bell: 'Bell',
+};
 
-const ensureChannel = async (): Promise<string> => {
-  if (!channelCreated) {
+const isKnownSound = (sound: string): sound is NotificationSoundId =>
+  NOTIFICATION_SOUNDS.some(s => s.id === sound);
+
+const createdChannels = new Set<string>();
+
+/**
+ * Android notification channels are immutable once created, so each tone gets
+ * its own channel (e.g. "plarem-reminders-chime") with the sound baked in.
+ * Custom tones live in android/app/src/main/res/raw/ (see scripts/generate-tones.js).
+ */
+const ensureChannel = async (sound: string): Promise<string> => {
+  const soundId: NotificationSoundId = isKnownSound(sound) ? sound : 'default';
+  const channelId = `${REMINDER_CHANNEL_ID}-${soundId}`;
+  if (!createdChannels.has(channelId)) {
     await notifee.createChannel({
-      id: REMINDER_CHANNEL_ID,
-      name: 'Location reminders',
+      id: channelId,
+      name: `Location reminders (${SOUND_LABELS[soundId]})`,
       importance: AndroidImportance.HIGH,
       vibration: true,
+      sound: soundId === 'default' ? 'default' : soundId,
     });
-    channelCreated = true;
+    createdChannels.add(channelId);
   }
-  return REMINDER_CHANNEL_ID;
+  return channelId;
 };
+
+const iosSound = (sound: string): string =>
+  sound === 'chime' || sound === 'bell' ? `${sound}.wav` : 'default';
 
 /** Displays the "you have arrived" notification for a reminder. */
 export const showArrivalNotification = async (reminder: Reminder): Promise<void> => {
-  const channelId = await ensureChannel();
+  const channelId = await ensureChannel(reminder.sound);
   await notifee.displayNotification({
     id: reminder.id,
     title: reminder.title,
@@ -36,8 +56,27 @@ export const showArrivalNotification = async (reminder: Reminder): Promise<void>
       showTimestamp: true,
     },
     ios: {
-      sound: 'default',
+      sound: iosSound(reminder.sound),
       interruptionLevel: 'timeSensitive',
+    },
+  });
+};
+
+/** Shows a test notification so the user can hear a tone (used by Settings). */
+export const previewNotificationSound = async (sound: NotificationSoundId): Promise<void> => {
+  const channelId = await ensureChannel(sound);
+  await notifee.displayNotification({
+    id: 'plarem-sound-preview',
+    title: `${SOUND_LABELS[sound]} tone`,
+    body: 'This is how arrival reminders will sound.',
+    android: {
+      channelId,
+      smallIcon: 'ic_launcher',
+      pressAction: { id: 'default' },
+      importance: AndroidImportance.HIGH,
+    },
+    ios: {
+      sound: iosSound(sound),
     },
   });
 };

@@ -17,6 +17,7 @@ const loadPreloadedState = ():
     settings: {
       themePreference: settings?.themePreference ?? 'system',
       onboarded: settings?.onboarded ?? false,
+      notificationSound: settings?.notificationSound ?? 'default',
     },
   };
 };

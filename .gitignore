@@ -43,6 +43,9 @@ local.properties
 # Generated
 src/constants/env.generated.ts
 
+# Local debugging screenshots
+.tmp-ui/
+
 # node.js
 #
 node_modules/

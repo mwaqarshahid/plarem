@@ -12,6 +12,8 @@ export const NOTIFICATION_SOUNDS = [
   { id: 'bell', label: 'Bell' },
 ] as const;
 
+export type NotificationSoundId = (typeof NOTIFICATION_SOUNDS)[number]['id'];
+
 export const PRIORITIES: { id: ReminderPriority; label: string; color: string }[] = [
   { id: 'low', label: 'Low', color: '#1F9D5B' },
   { id: 'medium', label: 'Medium', color: '#E8930C' },

@@ -35,9 +35,11 @@ export const ReminderFormScreen: React.FC<RootStackScreenProps<'ReminderForm'>> 
 
   const [title, setTitle] = useState(existing?.title ?? '');
   const [description, setDescription] = useState(existing?.description ?? '');
+  const defaultSound = useAppSelector(state => state.settings.notificationSound);
+
   const [location, setLocation] = useState(existing?.location);
   const [radius, setRadius] = useState(existing?.radius ?? RADIUS_PRESETS[1]);
-  const [sound, setSound] = useState(existing?.sound ?? NOTIFICATION_SOUNDS[0].id);
+  const [sound, setSound] = useState(existing?.sound ?? defaultSound);
   const [priority, setPriority] = useState<ReminderPriority>(existing?.priority ?? 'medium');
   const [category, setCategory] = useState<CategoryId>(existing?.category ?? 'personal');
   const [customCategory, setCustomCategory] = useState(existing?.customCategory ?? '');
@@ -304,7 +306,7 @@ export const ReminderFormScreen: React.FC<RootStackScreenProps<'ReminderForm'>> 
       </Card>
 
       <Button
-        label={existing ? 'Save changes' : 'Create reminder'}
+        label={existing ? 'Update reminder' : 'Create reminder'}
         icon="check"
         onPress={handleSave}
         loading={saving}

@@ -10,7 +10,7 @@ Geolocation.setRNConfiguration({
   locationProvider: 'auto',
 });
 
-export const getCurrentPosition = (): Promise<Coordinates> =>
+export const getCurrentPosition = (highAccuracy = true): Promise<Coordinates> =>
   new Promise((resolve, reject) => {
     Geolocation.getCurrentPosition(
       position =>
@@ -19,6 +19,6 @@ export const getCurrentPosition = (): Promise<Coordinates> =>
           longitude: position.coords.longitude,
         }),
       error => reject(new Error(error.message)),
-      { enableHighAccuracy: true, timeout: 15000, maximumAge: 10000 },
+      { enableHighAccuracy: highAccuracy, timeout: 15000, maximumAge: 10000 },
     );
   });
