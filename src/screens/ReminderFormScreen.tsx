@@ -5,19 +5,16 @@ import { useTheme } from '@theme';
 import { useAppDispatch, useAppSelector } from '@hooks';
 import { addReminder, updateReminder } from '@store';
 import {
+  checkBackgroundLocation,
+  checkForegroundLocation,
   checkNotifications,
   requestBackgroundLocation,
   requestForegroundLocation,
   requestNotifications,
 } from '@services';
-import { AppSwitch, Button, Card, Chip, Icon, TextField } from '@components';
-import {
-  CATEGORIES,
-  NOTIFICATION_SOUNDS,
-  PRIORITIES,
-  RADIUS_PRESETS,
-} from '@constants';
-import { CategoryId, ReminderPriority, ReminderRepeat } from '@types';
+import { Button, Card, Chip, Icon, TextField } from '@components';
+import { CATEGORIES, RADIUS_PRESETS } from '@constants';
+import { CategoryId, ReminderRepeat } from '@types';
 import { formatRadius } from '@utils';
 import { showAlert } from '@utils/alert';
 import type { RootStackScreenProps } from '@navigation/types';
@@ -36,16 +33,12 @@ export const ReminderFormScreen: React.FC<RootStackScreenProps<'ReminderForm'>> 
 
   const [title, setTitle] = useState(existing?.title ?? '');
   const [description, setDescription] = useState(existing?.description ?? '');
-  const defaultSound = useAppSelector(state => state.settings.notificationSound);
 
   const [location, setLocation] = useState(existing?.location);
   const [radius, setRadius] = useState(existing?.radius ?? RADIUS_PRESETS[1]);
-  const [sound, setSound] = useState(existing?.sound ?? defaultSound);
-  const [priority, setPriority] = useState<ReminderPriority>(existing?.priority ?? 'medium');
   const [category, setCategory] = useState<CategoryId>(existing?.category ?? 'personal');
   const [customCategory, setCustomCategory] = useState(existing?.customCategory ?? '');
   const [repeat, setRepeat] = useState<ReminderRepeat>(existing?.repeat ?? 'once');
-  const [enabled, setEnabled] = useState(existing?.enabled ?? true);
   const [titleError, setTitleError] = useState<string | undefined>();
   const [saving, setSaving] = useState(false);
 
@@ -68,7 +61,10 @@ export const ReminderFormScreen: React.FC<RootStackScreenProps<'ReminderForm'>> 
   );
 
   const ensurePermissions = async (): Promise<boolean> => {
-    const fg = await requestForegroundLocation();
+    let fg = await checkForegroundLocation();
+    if (fg !== 'granted') {
+      fg = await requestForegroundLocation();
+    }
     if (fg !== 'granted') {
       showAlert(
         'Location required',
@@ -76,13 +72,18 @@ export const ReminderFormScreen: React.FC<RootStackScreenProps<'ReminderForm'>> 
       );
       return false;
     }
-    const bg = await requestBackgroundLocation();
+
+    let bg = await checkBackgroundLocation();
+    if (bg !== 'granted') {
+      bg = await requestBackgroundLocation();
+    }
     if (bg !== 'granted') {
       showAlert(
         'Background location recommended',
         'Without "Allow all the time" location access, reminders will not trigger while the app is closed.',
       );
     }
+
     if ((await checkNotifications()) !== 'granted') {
       await requestNotifications();
     }
@@ -100,12 +101,10 @@ export const ReminderFormScreen: React.FC<RootStackScreenProps<'ReminderForm'>> 
     }
 
     setSaving(true);
-    if (enabled) {
-      const ok = await ensurePermissions();
-      if (!ok) {
-        setSaving(false);
-        return;
-      }
+    const ok = await ensurePermissions();
+    if (!ok) {
+      setSaving(false);
+      return;
     }
 
     const base = {
@@ -113,21 +112,13 @@ export const ReminderFormScreen: React.FC<RootStackScreenProps<'ReminderForm'>> 
       description: description.trim() || undefined,
       location,
       radius,
-      sound,
-      priority,
       category,
       customCategory: category === 'custom' ? customCategory.trim() || undefined : undefined,
       repeat,
-      enabled,
     };
 
     if (existing) {
-      dispatch(
-        updateReminder({
-          id: existing.id,
-          changes: { ...base, status: enabled ? 'pending' : 'disabled' },
-        }),
-      );
+      dispatch(updateReminder({ id: existing.id, changes: base }));
     } else {
       dispatch(addReminder(base));
     }
@@ -248,41 +239,6 @@ export const ReminderFormScreen: React.FC<RootStackScreenProps<'ReminderForm'>> 
 
       <View style={styles.section}>
         <Text style={[theme.typography.labelLarge, { color: theme.colors.onSurfaceVariant }]}>
-          Priority
-        </Text>
-        <View style={styles.chipRow}>
-          {PRIORITIES.map(p => (
-            <Chip
-              key={p.id}
-              testID={`form-priority-${p.id}`}
-              label={p.label}
-              color={p.color}
-              selected={priority === p.id}
-              onPress={() => setPriority(p.id)}
-            />
-          ))}
-        </View>
-      </View>
-
-      <View style={styles.section}>
-        <Text style={[theme.typography.labelLarge, { color: theme.colors.onSurfaceVariant }]}>
-          Notification sound
-        </Text>
-        <View style={styles.chipRow}>
-          {NOTIFICATION_SOUNDS.map(s => (
-            <Chip
-              key={s.id}
-              testID={`form-sound-${s.id}`}
-              label={s.label}
-              selected={sound === s.id}
-              onPress={() => setSound(s.id)}
-            />
-          ))}
-        </View>
-      </View>
-
-      <View style={styles.section}>
-        <Text style={[theme.typography.labelLarge, { color: theme.colors.onSurfaceVariant }]}>
           Repeat
         </Text>
         <View style={styles.chipRow}>
@@ -301,25 +257,9 @@ export const ReminderFormScreen: React.FC<RootStackScreenProps<'ReminderForm'>> 
         </View>
       </View>
 
-      <Card style={styles.enableRow}>
-        <View style={styles.enableText}>
-          <Text style={[theme.typography.titleMedium, { color: theme.colors.onSurface }]}>
-            Enabled
-          </Text>
-          <Text style={[theme.typography.bodySmall, { color: theme.colors.onSurfaceVariant }]}>
-            Monitoring starts as soon as you save
-          </Text>
-        </View>
-        <AppSwitch
-          testID="form-enabled-switch"
-          value={enabled}
-          onValueChange={setEnabled}
-        />
-      </Card>
-
       <Button
         testID="form-save"
-        label={existing ? 'Update reminder' : 'Create reminder'}
+        label="Save"
         icon="check"
         onPress={handleSave}
         loading={saving}
@@ -352,15 +292,6 @@ const styles = StyleSheet.create({
     gap: 12,
   },
   locationText: {
-    flex: 1,
-    gap: 2,
-  },
-  enableRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 12,
-  },
-  enableText: {
     flex: 1,
     gap: 2,
   },

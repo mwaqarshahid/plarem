@@ -1,6 +1,7 @@
 import notifee, { AndroidImportance, EventType } from '@notifee/react-native';
 import { REMINDER_CHANNEL_ID } from '@constants/config';
 import { NOTIFICATION_SOUNDS, type NotificationSoundId } from '@constants/reminders';
+import { store } from '@store';
 import { Reminder } from '@types';
 
 const SOUND_LABELS: Record<NotificationSoundId, string> = {
@@ -40,7 +41,8 @@ const iosSound = (sound: string): string =>
 
 /** Displays the "you have arrived" notification for a reminder. */
 export const showArrivalNotification = async (reminder: Reminder): Promise<void> => {
-  const channelId = await ensureChannel(reminder.sound);
+  const sound = store.getState().settings.notificationSound;
+  const channelId = await ensureChannel(sound);
   await notifee.displayNotification({
     id: reminder.id,
     title: reminder.title,
@@ -57,7 +59,7 @@ export const showArrivalNotification = async (reminder: Reminder): Promise<void>
       showTimestamp: true,
     },
     ios: {
-      sound: iosSound(reminder.sound),
+      sound: iosSound(sound),
       interruptionLevel: 'timeSensitive',
     },
   });

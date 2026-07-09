@@ -5,10 +5,7 @@ const base: Omit<Reminder, 'id' | 'title' | 'category' | 'status'> = {
   description: undefined,
   location: { latitude: 24.86, longitude: 67.0, address: 'Main Street 1' },
   radius: 250,
-  priority: 'medium',
   repeat: 'once',
-  sound: 'default',
-  enabled: true,
   createdAt: Date.now(),
   updatedAt: Date.now(),
 };

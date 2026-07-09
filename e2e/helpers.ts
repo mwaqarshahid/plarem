@@ -27,9 +27,9 @@ export const launchFresh = async (): Promise<void> => {
 };
 
 const getAdbSerial = (): string | undefined =>
-  process.env.ANDROID_SERIAL || device.id || 'R5CR11BAHBR';
+  process.env.ANDROID_SERIAL || device.id || undefined;
 
-/** Grant runtime permissions so enabled reminders can save without system dialogs. */
+/** Grant runtime permissions so reminders can save without system dialogs. */
 export const grantAndroidPermissions = (): void => {
   if (device.getPlatform() !== 'android') {
     return;
@@ -40,6 +40,7 @@ export const grantAndroidPermissions = (): void => {
   const permissions = [
     'android.permission.ACCESS_FINE_LOCATION',
     'android.permission.ACCESS_COARSE_LOCATION',
+    'android.permission.ACCESS_BACKGROUND_LOCATION',
     'android.permission.POST_NOTIFICATIONS',
   ];
 
@@ -49,6 +50,25 @@ export const grantAndroidPermissions = (): void => {
     } catch {
       // Ignore grant failures on older API levels or already-granted permissions.
     }
+  }
+
+  try {
+    execSync(`${adb} shell appops set ${ANDROID_PACKAGE} ACCESS_BACKGROUND_LOCATION allow`, {
+      stdio: 'ignore',
+    });
+  } catch {
+    // Some OEM builds reject appops overrides.
+  }
+};
+
+export const dismissAlertIfVisible = async (): Promise<void> => {
+  try {
+    await waitFor(element(by.id('app-alert-dialog')))
+      .toBeVisible()
+      .withTimeout(1500);
+    await element(by.id('alert-button-ok')).tap();
+  } catch {
+    // No alert on screen.
   }
 };
 
@@ -105,6 +125,72 @@ export const scrollDetailsTo = async (testID: string): Promise<void> => {
   await waitFor(target).toBeVisible().withTimeout(8000);
 };
 
+export const fillText = async (testID: string, value: string): Promise<void> => {
+  const field = element(by.id(testID));
+  await field.tap();
+  await field.replaceText(value);
+  try {
+    await device.pressBack();
+  } catch {
+    // Keyboard may already be dismissed.
+  }
+};
+
+export const tapFormSave = async (): Promise<void> => {
+  await scrollFormTo('form-save');
+  await element(by.id('form-save')).tap();
+};
+
+const pickLocationViaSearch = async (): Promise<void> => {
+  const search = element(by.id('location-picker-search'));
+  await search.tap();
+  await search.replaceText('Supermarket');
+  await waitFor(element(by.id('location-picker-suggestion-0')))
+    .toBeVisible()
+    .withTimeout(20000);
+  await element(by.id('location-picker-suggestion-0')).tap();
+};
+
+const pickLocationViaGps = async (): Promise<void> => {
+  await element(by.id('location-picker-current')).tap();
+  await waitFor(element(by.text('Tap the map, search or use your current location.')))
+    .not.toBeVisible()
+    .withTimeout(20000);
+};
+
+export const pickLocationOnMap = async (): Promise<void> => {
+  await element(by.id('form-location-card')).tap();
+  await waitFor(element(by.id('location-picker-screen')))
+    .toBeVisible()
+    .withTimeout(10000);
+  await dismissAlertIfVisible();
+
+  try {
+    await pickLocationViaSearch();
+  } catch {
+    await pickLocationViaGps();
+  }
+
+  try {
+    await waitFor(element(by.text('Resolving address…')))
+      .not.toBeVisible()
+      .withTimeout(15000);
+  } catch {
+    // Geocode may finish before the matcher runs.
+  }
+
+  await waitFor(element(by.id('location-picker-confirm')))
+    .toBeVisible()
+    .withTimeout(5000);
+  await element(by.id('location-picker-confirm')).tap();
+  await waitFor(element(by.id('reminder-form-screen')))
+    .toBeVisible()
+    .withTimeout(8000);
+  await waitFor(element(by.id('form-location-label')))
+    .not.toHaveText('Choose a location')
+    .withTimeout(8000);
+};
+
 export const openReminderFromHome = async (title: string): Promise<void> => {
   await waitFor(element(by.id('home-screen')))
     .toBeVisible()
@@ -118,15 +204,18 @@ export const openReminderFromHome = async (title: string): Promise<void> => {
     .withTimeout(8000);
 };
 
-export const createReminderWithDemoLocation = async (): Promise<void> => {
+export const createReminder = async (title: string): Promise<void> => {
   await openCreateReminder();
-  await scrollFormTo('form-e2e-create-buy-milk');
-  await element(by.id('form-e2e-create-buy-milk')).tap();
+  await fillText('form-title', title);
+  await pickLocationOnMap();
+
+  await tapFormSave();
+  await dismissAlertIfVisible();
 
   await waitFor(element(by.id('home-screen')))
     .toBeVisible()
     .withTimeout(15000);
-  await waitFor(element(by.text('Buy milk')))
+  await waitFor(element(by.text(title)))
     .toBeVisible()
     .withTimeout(8000);
 };

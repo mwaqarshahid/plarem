@@ -26,7 +26,7 @@ const remindersSlice = createSlice({
         const reminder: Reminder = {
           ...draft,
           id: generateId(),
-          status: draft.enabled ? 'pending' : 'disabled',
+          status: 'pending',
           createdAt: now,
           updatedAt: now,
         };
@@ -46,7 +46,6 @@ const remindersSlice = createSlice({
       const reminder = state.items.find(r => r.id === action.payload.id);
       if (reminder) {
         reminder.status = action.payload.status;
-        reminder.enabled = action.payload.status === 'pending';
         reminder.updatedAt = Date.now();
       }
     },
@@ -56,7 +55,6 @@ const remindersSlice = createSlice({
         reminder.lastTriggeredAt = action.payload.at;
         if (reminder.repeat === 'once') {
           reminder.status = 'completed';
-          reminder.enabled = false;
         }
         reminder.updatedAt = Date.now();
       }

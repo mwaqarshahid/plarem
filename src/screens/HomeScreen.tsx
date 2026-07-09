@@ -49,9 +49,9 @@ export const HomeScreen: React.FC<MainTabScreenProps<'Home'>> = ({ navigation })
     [reminders, search, filter, userLocation],
   );
 
-  const handleToggle = (id: string, enabled: boolean): void => {
+  const handleToggle = (id: string, active: boolean): void => {
     dispatch(
-      updateReminder({ id, changes: { enabled, status: enabled ? 'pending' : 'disabled' } }),
+      updateReminder({ id, changes: { status: active ? 'pending' : 'disabled' } }),
     );
   };
 
@@ -113,7 +113,7 @@ export const HomeScreen: React.FC<MainTabScreenProps<'Home'>> = ({ navigation })
           <ReminderCard
             reminder={item}
             onPress={() => navigation.navigate('ReminderDetails', { reminderId: item.id })}
-            onToggleEnabled={enabled => handleToggle(item.id, enabled)}
+            onToggleActive={active => handleToggle(item.id, active)}
           />
         )}
         ListEmptyComponent={

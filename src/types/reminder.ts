@@ -1,7 +1,5 @@
 export type ReminderStatus = 'pending' | 'completed' | 'skipped' | 'disabled' | 'expired';
 
-export type ReminderPriority = 'low' | 'medium' | 'high';
-
 export type ReminderRepeat = 'once' | 'every_arrival';
 
 export type CategoryId =
@@ -32,14 +30,10 @@ export interface Reminder {
   /** Geofence radius in meters. */
   radius: number;
   status: ReminderStatus;
-  priority: ReminderPriority;
   category: CategoryId;
   /** Custom category label when category === 'custom'. */
   customCategory?: string;
   repeat: ReminderRepeat;
-  /** Sound key from the sounds constant list. */
-  sound: string;
-  enabled: boolean;
   /** Epoch ms. */
   createdAt: number;
   updatedAt: number;

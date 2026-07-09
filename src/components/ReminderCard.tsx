@@ -11,13 +11,13 @@ import { Icon } from './Icon';
 interface ReminderCardProps {
   reminder: Reminder;
   onPress: () => void;
-  onToggleEnabled: (enabled: boolean) => void;
+  onToggleActive: (active: boolean) => void;
 }
 
 export const ReminderCard: React.FC<ReminderCardProps> = ({
   reminder,
   onPress,
-  onToggleEnabled,
+  onToggleActive,
 }) => {
   const theme = useTheme();
   const category = getCategoryMeta(reminder.category);
@@ -55,8 +55,8 @@ export const ReminderCard: React.FC<ReminderCardProps> = ({
         </View>
         <AppSwitch
           testID={`reminder-card-switch-${reminder.id}`}
-          value={reminder.enabled}
-          onValueChange={onToggleEnabled}
+          value={reminder.status === 'pending'}
+          onValueChange={onToggleActive}
         />
       </View>
 

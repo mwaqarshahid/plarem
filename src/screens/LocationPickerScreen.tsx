@@ -309,8 +309,9 @@ export const LocationPickerScreen: React.FC<RootStackScreenProps<'LocationPicker
                 data={suggestions}
                 keyboardShouldPersistTaps="handled"
                 keyExtractor={item => item.id}
-                renderItem={({ item }) => (
+                renderItem={({ item, index }) => (
                   <Pressable
+                    testID={`location-picker-suggestion-${index}`}
                     style={styles.suggestionRow}
                     onPress={() => {
                       Keyboard.dismiss();

@@ -4,6 +4,24 @@ import { Reminder } from '@types';
 import remindersReducer, { RemindersState } from './remindersSlice';
 import settingsReducer, { SettingsState } from './settingsSlice';
 
+/** Strip legacy per-reminder fields from persisted data. */
+const migrateReminders = (items: Reminder[]): Reminder[] =>
+  items.map(({ id, title, description, location, radius, status, category, customCategory, repeat, createdAt, updatedAt, lastTriggeredAt, expiresAt }) => ({
+    id,
+    title,
+    description,
+    location,
+    radius,
+    status,
+    category,
+    customCategory,
+    repeat,
+    createdAt,
+    updatedAt,
+    lastTriggeredAt,
+    expiresAt,
+  }));
+
 const loadPreloadedState = ():
   | { reminders: RemindersState; settings: SettingsState }
   | undefined => {
@@ -13,7 +31,7 @@ const loadPreloadedState = ():
     return undefined;
   }
   return {
-    reminders: { items: reminders ?? [] },
+    reminders: { items: reminders ? migrateReminders(reminders) : [] },
     settings: {
       themePreference: settings?.themePreference ?? 'system',
       onboarded: settings?.onboarded ?? Boolean(settings),
