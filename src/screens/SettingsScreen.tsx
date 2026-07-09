@@ -210,7 +210,7 @@ export const SettingsScreen: React.FC<MainTabScreenProps<'Settings'>> = () => {
                 {APP_NAME}
               </Text>
               <Text style={[theme.typography.bodySmall, { color: theme.colors.onSurfaceVariant }]}>
-                {APP_TAGLINE} — v{APP_VERSION}
+                {APP_TAGLINE} - v{APP_VERSION}
               </Text>
             </View>
           </View>

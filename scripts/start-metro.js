@@ -8,6 +8,9 @@ delete process.env.NO_COLOR;
 const { spawn } = require('child_process');
 const path = require('path');
 
+// Regenerate env.generated.ts (maps key + app version) so Metro never serves stale values.
+require('./sync-env');
+
 const child = spawn(
   process.execPath,
   [path.join(__dirname, '..', 'node_modules', 'react-native', 'cli.js'), 'start', ...process.argv.slice(2)],

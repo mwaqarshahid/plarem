@@ -101,10 +101,13 @@ export const ReminderFormScreen: React.FC<RootStackScreenProps<'ReminderForm'>> 
     }
 
     setSaving(true);
-    const ok = await ensurePermissions();
-    if (!ok) {
-      setSaving(false);
-      return;
+    const willMonitor = !existing || existing.status === 'pending';
+    if (willMonitor) {
+      const ok = await ensurePermissions();
+      if (!ok) {
+        setSaving(false);
+        return;
+      }
     }
 
     const base = {
