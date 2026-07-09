@@ -204,8 +204,11 @@ export const LocationPickerScreen: React.FC<RootStackScreenProps<'LocationPicker
   };
 
   return (
-    <View style={[styles.container, { backgroundColor: theme.colors.background }]}>
+    <View
+      testID="location-picker-screen"
+      style={[styles.container, { backgroundColor: theme.colors.background }]}>
       <MapView
+        testID="location-picker-map"
         ref={mapRef}
         provider={PROVIDER_GOOGLE}
         style={StyleSheet.absoluteFill}
@@ -273,6 +276,8 @@ export const LocationPickerScreen: React.FC<RootStackScreenProps<'LocationPicker
       <View pointerEvents="box-none" style={[styles.searchOverlay, { top: insets.top + 8 }]}>
         <View style={styles.searchRow}>
           <Pressable
+            testID="location-picker-back"
+            accessibilityLabel="Go back"
             onPress={() => navigation.goBack()}
             style={[
               styles.roundButton,
@@ -282,6 +287,7 @@ export const LocationPickerScreen: React.FC<RootStackScreenProps<'LocationPicker
           </Pressable>
           <View style={styles.searchField}>
             <TextField
+              testID="location-picker-search"
               placeholder="Search address or place"
               value={query}
               onChangeText={setQuery}
@@ -379,6 +385,7 @@ export const LocationPickerScreen: React.FC<RootStackScreenProps<'LocationPicker
 
         <View style={styles.actionsRow}>
           <Button
+            testID="location-picker-current"
             label="Current location"
             icon="crosshairs-gps"
             variant="secondary"
@@ -387,6 +394,7 @@ export const LocationPickerScreen: React.FC<RootStackScreenProps<'LocationPicker
             style={styles.actionButton}
           />
           <Button
+            testID="location-picker-confirm"
             label="Confirm"
             icon="check"
             onPress={confirm}

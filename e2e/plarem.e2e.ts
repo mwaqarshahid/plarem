@@ -1,0 +1,180 @@
+import {
+  createReminderWithDemoLocation,
+  launchFresh,
+  openReminderFromHome,
+  scrollDetailsTo,
+  scrollFormTo,
+  skipOnboarding,
+} from './helpers';
+
+describe('Onboarding', () => {
+  beforeAll(async () => {
+    await launchFresh();
+  });
+
+  it('skips permission steps and lands on Home', async () => {
+    await expect(element(by.id('onboarding-screen'))).toBeVisible();
+    await expect(element(by.text('Welcome to Plarem'))).toBeVisible();
+
+    await skipOnboarding();
+
+    await expect(element(by.id('home-title'))).toHaveText('Plarem');
+    await expect(element(by.text('No reminders yet'))).toBeVisible();
+  });
+});
+
+describe('Home', () => {
+  beforeAll(async () => {
+    await launchFresh();
+    await skipOnboarding();
+  });
+
+  it('shows empty state and filter chips', async () => {
+    await expect(element(by.id('home-screen'))).toBeVisible();
+    await expect(element(by.id('home-fab'))).toBeVisible();
+    await expect(element(by.id('filter-all'))).toBeVisible();
+    await expect(element(by.id('filter-pending'))).toBeVisible();
+    await expect(element(by.text('No reminders yet'))).toBeVisible();
+  });
+
+  it('filters an empty list without crashing', async () => {
+    await waitFor(element(by.id('filter-shopping')))
+      .toBeVisible()
+      .whileElement(by.id('home-filters'))
+      .scroll(200, 'right');
+    await element(by.id('filter-shopping')).tap();
+    // With zero reminders total, Home still shows the global empty copy.
+    await expect(element(by.text('No reminders yet'))).toBeVisible();
+
+    await waitFor(element(by.id('filter-all')))
+      .toBeVisible()
+      .whileElement(by.id('home-filters'))
+      .scroll(200, 'left');
+    await element(by.id('filter-all')).tap();
+    await expect(element(by.text('No reminders yet'))).toBeVisible();
+  });
+});
+
+describe('Settings', () => {
+  beforeAll(async () => {
+    await launchFresh();
+    await skipOnboarding();
+  });
+
+  it('opens Settings and changes theme preference', async () => {
+    await element(by.id('tab-settings')).tap();
+    await waitFor(element(by.id('settings-screen')))
+      .toBeVisible()
+      .withTimeout(8000);
+
+    await expect(element(by.id('settings-screen'))).toBeVisible();
+    await expect(element(by.text('Appearance'))).toBeVisible();
+
+    await waitFor(element(by.id('settings-theme-dark')))
+      .toBeVisible()
+      .whileElement(by.id('settings-screen'))
+      .scroll(220, 'down');
+    await element(by.id('settings-theme-dark')).tap();
+    await element(by.id('settings-theme-light')).tap();
+
+    await waitFor(element(by.id('settings-sound-chime')))
+      .toBeVisible()
+      .whileElement(by.id('settings-screen'))
+      .scroll(220, 'up');
+    await element(by.id('settings-sound-chime')).tap();
+
+    await element(by.id('tab-reminders')).tap();
+    await expect(element(by.id('home-screen'))).toBeVisible();
+  });
+});
+
+describe('Reminder CRUD', () => {
+  beforeAll(async () => {
+    await launchFresh();
+    await skipOnboarding();
+  });
+
+  it('creates a reminder with the demo location', async () => {
+    await createReminderWithDemoLocation();
+    await expect(element(by.text('Buy milk'))).toBeVisible();
+  });
+
+  it('opens details, edits the title, and saves', async () => {
+    await openReminderFromHome('Buy milk');
+    await expect(element(by.id('reminder-details-title'))).toHaveText('Buy milk');
+
+    await scrollDetailsTo('details-edit');
+    await element(by.id('details-edit')).tap();
+    await waitFor(element(by.id('reminder-form-screen')))
+      .toBeVisible()
+      .withTimeout(8000);
+
+    await scrollFormTo('form-e2e-update-buy-eggs');
+    await element(by.id('form-e2e-update-buy-eggs')).tap();
+
+    await waitFor(element(by.id('reminder-details-screen')))
+      .toBeVisible()
+      .withTimeout(8000);
+    await expect(element(by.id('reminder-details-title'))).toHaveText('Buy eggs');
+  });
+
+  it('marks a reminder completed then deletes it', async () => {
+    await scrollDetailsTo('details-reactivate');
+    await element(by.id('details-reactivate')).tap();
+    await expect(element(by.id('reminder-details-status'))).toHaveText('Pending');
+
+    await scrollDetailsTo('details-mark-completed');
+    await element(by.id('details-mark-completed')).tap();
+    await expect(element(by.id('reminder-details-status'))).toHaveText('Completed');
+
+    await scrollDetailsTo('details-e2e-delete');
+    await element(by.text('E2E delete')).tap();
+
+    await waitFor(element(by.id('home-screen')))
+      .toBeVisible()
+      .withTimeout(15000);
+    await waitFor(element(by.text('No reminders yet')))
+      .toBeVisible()
+      .withTimeout(8000);
+  });
+});
+
+describe('Form validation', () => {
+  beforeEach(async () => {
+    await launchFresh();
+    await skipOnboarding();
+  });
+
+  it('blocks save without a title', async () => {
+    await element(by.id('home-fab')).tap();
+    await waitFor(element(by.id('reminder-form-screen')))
+      .toBeVisible()
+      .withTimeout(8000);
+
+    await scrollFormTo('form-use-demo-location');
+    await element(by.id('form-use-demo-location')).tap();
+
+    await scrollFormTo('form-e2e-validate-title');
+    await element(by.id('form-e2e-validate-title')).tap();
+
+    await waitFor(element(by.id('form-title-error')))
+      .toHaveText('Give your reminder a title')
+      .withTimeout(8000);
+    await expect(element(by.id('reminder-form-screen'))).toBeVisible();
+  });
+
+  it('prompts for a location when title is set', async () => {
+    await element(by.id('home-fab')).tap();
+    await waitFor(element(by.id('reminder-form-screen')))
+      .toBeVisible()
+      .withTimeout(8000);
+
+    await scrollFormTo('form-e2e-validate-location');
+    await element(by.id('form-e2e-validate-location')).tap();
+
+    await waitFor(element(by.text('Location missing')))
+      .toBeVisible()
+      .withTimeout(8000);
+    await element(by.id('alert-button-ok')).tap();
+  });
+});

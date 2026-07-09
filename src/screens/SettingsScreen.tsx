@@ -98,6 +98,7 @@ export const SettingsScreen: React.FC<MainTabScreenProps<'Settings'>> = () => {
 
   return (
     <ScrollView
+      testID="settings-screen"
       style={{ backgroundColor: theme.colors.background }}
       contentContainerStyle={styles.content}>
       <Text style={[theme.typography.headlineMedium, { color: theme.colors.onSurface }]}>
@@ -128,6 +129,7 @@ export const SettingsScreen: React.FC<MainTabScreenProps<'Settings'>> = () => {
             onGrant={grantNotifications}
           />
           <Text
+            testID="settings-open-system"
             onPress={openAppSettings}
             style={[theme.typography.labelLarge, styles.settingsLink, { color: theme.colors.primary }]}>
             Open system settings
@@ -147,6 +149,7 @@ export const SettingsScreen: React.FC<MainTabScreenProps<'Settings'>> = () => {
             {NOTIFICATION_SOUNDS.map(sound => (
               <Chip
                 key={sound.id}
+                testID={`settings-sound-${sound.id}`}
                 label={sound.label}
                 icon={notificationSound === sound.id ? 'volume-high' : 'music-note-outline'}
                 selected={notificationSound === sound.id}
@@ -171,18 +174,21 @@ export const SettingsScreen: React.FC<MainTabScreenProps<'Settings'>> = () => {
         <Card>
           <View style={styles.chipRow}>
             <Chip
+              testID="settings-theme-system"
               label="System"
               icon="theme-light-dark"
               selected={themePreference === 'system'}
               onPress={() => dispatch(setThemePreference('system'))}
             />
             <Chip
+              testID="settings-theme-light"
               label="Light"
               icon="white-balance-sunny"
               selected={themePreference === 'light'}
               onPress={() => dispatch(setThemePreference('light'))}
             />
             <Chip
+              testID="settings-theme-dark"
               label="Dark"
               icon="weather-night"
               selected={themePreference === 'dark'}

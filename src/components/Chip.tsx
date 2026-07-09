@@ -9,9 +9,10 @@ interface ChipProps {
   onPress?: () => void;
   icon?: string;
   color?: string;
+  testID?: string;
 }
 
-export const Chip: React.FC<ChipProps> = ({ label, selected, onPress, icon, color }) => {
+export const Chip: React.FC<ChipProps> = ({ label, selected, onPress, icon, color, testID }) => {
   const theme = useTheme();
   const accent = color ?? theme.colors.primary;
   const background = selected ? accent : theme.colors.surfaceVariant;
@@ -23,6 +24,8 @@ export const Chip: React.FC<ChipProps> = ({ label, selected, onPress, icon, colo
 
   return (
     <Pressable
+      testID={testID}
+      accessibilityLabel={label}
       onPress={onPress}
       android_ripple={{ color: theme.colors.ripple }}
       style={[

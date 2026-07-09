@@ -29,7 +29,7 @@ export const ReminderCard: React.FC<ReminderCardProps> = ({
   const locationLabel = reminder.location.placeName ?? reminder.location.address;
 
   return (
-    <Card onPress={onPress} style={styles.card}>
+    <Card testID={`reminder-card-${reminder.id}`} onPress={onPress} style={styles.card}>
       <View style={styles.row}>
         <View
           style={[
@@ -40,6 +40,7 @@ export const ReminderCard: React.FC<ReminderCardProps> = ({
         </View>
         <View style={styles.titleBlock}>
           <Text
+            testID={`reminder-card-title-${reminder.id}`}
             numberOfLines={1}
             style={[theme.typography.titleMedium, { color: theme.colors.onSurface }]}>
             {reminder.title}
@@ -53,6 +54,7 @@ export const ReminderCard: React.FC<ReminderCardProps> = ({
           ) : null}
         </View>
         <AppSwitch
+          testID={`reminder-card-switch-${reminder.id}`}
           value={reminder.enabled}
           onValueChange={onToggleEnabled}
         />

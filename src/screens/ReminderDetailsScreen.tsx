@@ -22,7 +22,9 @@ export const ReminderDetailsScreen: React.FC<RootStackScreenProps<'ReminderDetai
 
   if (!reminder) {
     return (
-      <View style={[styles.container, { backgroundColor: theme.colors.background }]}>
+      <View
+        testID="reminder-details-missing"
+        style={[styles.container, { backgroundColor: theme.colors.background }]}>
         <EmptyState
           icon="bell-off-outline"
           title="Reminder not found"
@@ -51,6 +53,7 @@ export const ReminderDetailsScreen: React.FC<RootStackScreenProps<'ReminderDetai
 
   return (
     <ScrollView
+      testID="reminder-details-screen"
       style={{ backgroundColor: theme.colors.background }}
       contentContainerStyle={styles.content}>
       <View style={[styles.mapWrapper, { borderRadius: theme.radius.xl }]}>
@@ -93,7 +96,9 @@ export const ReminderDetailsScreen: React.FC<RootStackScreenProps<'ReminderDetai
           <Icon name={category.icon} size={26} color={category.color} />
         </View>
         <View style={styles.headerText}>
-          <Text style={[theme.typography.headlineMedium, { color: theme.colors.onSurface }]}>
+          <Text
+            testID="reminder-details-title"
+            style={[theme.typography.headlineMedium, { color: theme.colors.onSurface }]}>
             {reminder.title}
           </Text>
           <View
@@ -102,7 +107,9 @@ export const ReminderDetailsScreen: React.FC<RootStackScreenProps<'ReminderDetai
               { backgroundColor: `${statusColor}22`, borderRadius: theme.radius.pill },
             ]}>
             <View style={[styles.statusDot, { backgroundColor: statusColor }]} />
-            <Text style={[theme.typography.labelSmall, { color: statusColor }]}>
+            <Text
+              testID="reminder-details-status"
+              style={[theme.typography.labelSmall, { color: statusColor }]}>
               {STATUS_LABELS[reminder.status]}
             </Text>
           </View>
@@ -154,6 +161,7 @@ export const ReminderDetailsScreen: React.FC<RootStackScreenProps<'ReminderDetai
         {reminder.status === 'pending' ? (
           <>
             <Button
+              testID="details-mark-completed"
               label="Mark completed"
               icon="check-circle-outline"
               onPress={() => {
@@ -161,6 +169,7 @@ export const ReminderDetailsScreen: React.FC<RootStackScreenProps<'ReminderDetai
               }}
             />
             <Button
+              testID="details-skip"
               label="Skip"
               icon="debug-step-over"
               variant="secondary"
@@ -171,6 +180,7 @@ export const ReminderDetailsScreen: React.FC<RootStackScreenProps<'ReminderDetai
           </>
         ) : (
           <Button
+            testID="details-reactivate"
             label="Reactivate"
             icon="restart"
             onPress={() => {
@@ -179,12 +189,19 @@ export const ReminderDetailsScreen: React.FC<RootStackScreenProps<'ReminderDetai
           />
         )}
         <Button
+          testID="details-edit"
           label="Edit"
           icon="pencil-outline"
           variant="secondary"
           onPress={() => navigation.navigate('ReminderForm', { reminderId: reminder.id })}
         />
-        <Button label="Delete" icon="trash-can-outline" variant="danger" onPress={handleDelete} />
+        <Button
+          testID="details-delete"
+          label="Delete"
+          icon="trash-can-outline"
+          variant="danger"
+          onPress={handleDelete}
+        />
       </View>
     </ScrollView>
   );

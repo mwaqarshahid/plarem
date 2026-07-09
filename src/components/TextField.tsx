@@ -5,9 +5,17 @@ import { useTheme } from '@theme';
 interface TextFieldProps extends TextInputProps {
   label?: string;
   error?: string;
+  errorTestID?: string;
 }
 
-export const TextField: React.FC<TextFieldProps> = ({ label, error, style, ...rest }) => {
+export const TextField: React.FC<TextFieldProps> = ({
+  label,
+  error,
+  errorTestID,
+  style,
+  testID,
+  ...rest
+}) => {
   const theme = useTheme();
   const dynamicInputStyle = {
     backgroundColor: theme.colors.surfaceVariant,
@@ -28,12 +36,18 @@ export const TextField: React.FC<TextFieldProps> = ({ label, error, style, ...re
         </Text>
       ) : null}
       <TextInput
+        {...rest}
+        testID={testID}
+        importantForAutofill="no"
         placeholderTextColor={theme.colors.onSurfaceVariant}
         style={[theme.typography.bodyLarge, styles.input, dynamicInputStyle, style]}
-        {...rest}
       />
       {error ? (
-        <Text style={[theme.typography.bodySmall, { color: theme.colors.error }]}>{error}</Text>
+        <Text
+          testID={errorTestID}
+          style={[theme.typography.bodySmall, { color: theme.colors.error }]}>
+          {error}
+        </Text>
       ) : null}
     </View>
   );

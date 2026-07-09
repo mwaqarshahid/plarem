@@ -7,9 +7,10 @@ interface CardProps {
   onPress?: () => void;
   onLongPress?: () => void;
   style?: ViewStyle;
+  testID?: string;
 }
 
-export const Card: React.FC<CardProps> = ({ children, onPress, onLongPress, style }) => {
+export const Card: React.FC<CardProps> = ({ children, onPress, onLongPress, style, testID }) => {
   const theme = useTheme();
   const cardStyle = [
     styles.card,
@@ -22,11 +23,16 @@ export const Card: React.FC<CardProps> = ({ children, onPress, onLongPress, styl
   ];
 
   if (!onPress && !onLongPress) {
-    return <View style={cardStyle}>{children}</View>;
+    return (
+      <View testID={testID} style={cardStyle}>
+        {children}
+      </View>
+    );
   }
 
   return (
     <Pressable
+      testID={testID}
       onPress={onPress}
       onLongPress={onLongPress}
       android_ripple={{ color: theme.colors.ripple }}

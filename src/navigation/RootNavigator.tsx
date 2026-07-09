@@ -56,6 +56,8 @@ const MainTabs: React.FC = () => {
         options={{
           tabBarLabel: 'Reminders',
           tabBarIcon: renderHomeIcon,
+          tabBarButtonTestID: 'tab-reminders',
+          tabBarAccessibilityLabel: 'Reminders',
         }}
       />
       <Tab.Screen
@@ -64,6 +66,8 @@ const MainTabs: React.FC = () => {
         options={{
           tabBarLabel: 'Settings',
           tabBarIcon: renderSettingsIcon,
+          tabBarButtonTestID: 'tab-settings',
+          tabBarAccessibilityLabel: 'Settings',
         }}
       />
     </Tab.Navigator>
