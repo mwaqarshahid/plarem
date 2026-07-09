@@ -112,8 +112,7 @@ describe.skip('Reminder CRUD', () => {
 
     await fillText('form-title', 'Buy eggs');
 
-    await scrollFormTo('form-save');
-    await element(by.id('form-save')).tap();
+    await tapFormSave();
 
     await waitFor(element(by.id('reminder-details-screen')))
       .toBeVisible()
@@ -159,8 +158,7 @@ describe.skip('Form validation', () => {
       .toBeVisible()
       .withTimeout(8000);
 
-    await scrollFormTo('form-save');
-    await element(by.id('form-save')).tap();
+    await tapFormSave();
     await scrollFormTo('form-title-error');
 
     await waitFor(element(by.id('form-title-error')))

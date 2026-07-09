@@ -182,6 +182,7 @@ export const ReminderDetailsScreen: React.FC<RootStackScreenProps<'ReminderDetai
             testID="details-reactivate"
             label="Reactivate"
             icon="restart"
+            variant="secondary"
             onPress={() => {
               dispatch(setReminderStatus({ id: reminder.id, status: 'pending' }));
             }}

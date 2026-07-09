@@ -30,19 +30,19 @@ export const Button: React.FC<ButtonProps> = ({
 
   const background =
     variant === 'primary'
-      ? theme.colors.primary
+      ? theme.colors.secondary
       : variant === 'danger'
       ? theme.colors.error
       : variant === 'secondary'
-      ? theme.colors.surfaceVariant
+      ? theme.colors.primary
       : 'transparent';
   const foreground =
     variant === 'primary'
-      ? theme.colors.onPrimary
+      ? theme.colors.onSecondary
       : variant === 'danger'
       ? theme.colors.onError
       : variant === 'secondary'
-      ? theme.colors.onSurface
+      ? theme.colors.onPrimary
       : theme.colors.primary;
 
   return (

@@ -47,7 +47,7 @@ export const lightColors: ThemeColors = {
 export const darkColors: ThemeColors = {
   primary: '#9BA3FF',
   onPrimary: '#151845',
-  primaryContainer: '#343B8F',
+  primaryContainer: '#4650BE',
   onPrimaryContainer: '#E1E3FF',
   secondary: '#3DD9BD',
   onSecondary: '#00382E',

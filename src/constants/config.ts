@@ -1,8 +1,11 @@
 import type { Region } from 'react-native-maps';
-import { GOOGLE_MAPS_API_KEY as GENERATED_GOOGLE_MAPS_API_KEY } from './env.generated';
+import {
+  APP_VERSION as GENERATED_APP_VERSION,
+  GOOGLE_MAPS_API_KEY as GENERATED_GOOGLE_MAPS_API_KEY,
+} from './env.generated';
 
-/** Keep in sync with package.json version. */
-export const APP_VERSION = '0.0.1';
+/** Stamped from package.json (the single source of truth) by scripts/sync-env.js. */
+export const APP_VERSION = GENERATED_APP_VERSION;
 
 export const APP_NAME = 'Plarem';
 

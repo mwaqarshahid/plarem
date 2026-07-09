@@ -111,7 +111,8 @@ android {
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
-        versionName "1.0"
+        // App version comes from package.json — the single source of truth.
+        versionName new groovy.json.JsonSlurper().parseText(rootProject.file('../package.json').text).version
         // Native Google Maps SDK key from the project root .env file.
         manifestPlaceholders = [
             GOOGLE_MAPS_API_KEY: googleMapsApiKey
@@ -154,3 +155,11 @@ dependencies {
         implementation jscFlavor
     }
 }
+
+// Regenerate src/constants/env.generated.ts and native version stamps before any
+// Gradle-driven build, so release builds never bundle stale or missing values.
+def syncEnv = tasks.register('syncEnv', Exec) {
+    workingDir rootProject.file('..')
+    commandLine 'node', 'scripts/sync-env.js'
+}
+preBuild.dependsOn(syncEnv)
