@@ -57,13 +57,18 @@ export const HomeScreen: React.FC<MainTabScreenProps<'Home'>> = ({ navigation })
 
   return (
     <View
+      testID="home-screen"
       style={[styles.container, { backgroundColor: theme.colors.background, paddingTop: insets.top }]}>
       <View style={styles.header}>
         <View>
-          <Text style={[theme.typography.headlineMedium, { color: theme.colors.onSurface }]}>
+          <Text
+            testID="home-title"
+            style={[theme.typography.headlineMedium, { color: theme.colors.onSurface }]}>
             Plarem
           </Text>
-          <Text style={[theme.typography.bodySmall, { color: theme.colors.onSurfaceVariant }]}>
+          <Text
+            testID="home-active-count"
+            style={[theme.typography.bodySmall, { color: theme.colors.onSurfaceVariant }]}>
             {reminders.filter(r => r.status === 'pending').length} active reminders
           </Text>
         </View>
@@ -71,6 +76,7 @@ export const HomeScreen: React.FC<MainTabScreenProps<'Home'>> = ({ navigation })
 
       <View style={styles.searchWrapper}>
         <TextField
+          testID="home-search"
           placeholder="Search reminders, places, categories…"
           value={search}
           onChangeText={setSearch}
@@ -82,10 +88,12 @@ export const HomeScreen: React.FC<MainTabScreenProps<'Home'>> = ({ navigation })
         <ScrollView
           horizontal
           showsHorizontalScrollIndicator={false}
-          contentContainerStyle={styles.filters}>
+          contentContainerStyle={styles.filters}
+          testID="home-filters">
           {FILTERS.map(f => (
             <Chip
               key={f.id}
+              testID={`filter-${f.id}`}
               label={f.label}
               icon={f.icon}
               selected={filter === f.id}
@@ -96,6 +104,7 @@ export const HomeScreen: React.FC<MainTabScreenProps<'Home'>> = ({ navigation })
       </View>
 
       <FlatList
+        testID="home-reminder-list"
         data={visible}
         keyExtractor={item => item.id}
         contentContainerStyle={styles.list}
@@ -121,6 +130,8 @@ export const HomeScreen: React.FC<MainTabScreenProps<'Home'>> = ({ navigation })
       />
 
       <Pressable
+        testID="home-fab"
+        accessibilityLabel="Create reminder"
         onPress={() => navigation.navigate('ReminderForm')}
         android_ripple={{ color: theme.colors.ripple }}
         style={[

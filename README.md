@@ -86,6 +86,65 @@ npm run lint
 npx tsc --noEmit
 ```
 
+## Testing (Detox E2E)
+
+This repo includes **Detox** end-to-end tests under `e2e/`. They run against a **real attached Android device** or an **Android emulator**.
+
+### Prerequisites
+
+- Install dependencies:
+
+```bash
+npm install
+```
+
+- Make sure **Metro is running** and reachable from the device:
+  - For a real device: use `adb reverse` so the device can access `localhost:8081` on your computer.
+
+### Run on a real Android device (attached)
+
+1. Connect the phone and verify ADB sees it:
+
+```bash
+adb devices
+```
+
+2. Reverse the Metro port and start Metro:
+
+```bash
+adb reverse tcp:8081 tcp:8081
+npm run start
+```
+
+3. Build the debug + test APKs (only needed after native changes or a clean build):
+
+```bash
+npm run e2e:build:android:att
+```
+
+4. Run the tests:
+
+```bash
+# Optional, but recommended if you have multiple devices connected:
+# PowerShell:
+$env:ANDROID_SERIAL='YOUR_DEVICE_SERIAL'
+
+npm run e2e:android:att
+```
+
+### Run on an Android emulator
+
+```bash
+npm run e2e:build:android
+npm run e2e:android
+```
+
+### Notes / troubleshooting
+
+- **Metro port already in use (`EADDRINUSE 8081`)**: another Metro instance is running. Close it or reuse it; Detox only needs Metro to be running once.
+- **Device can’t reach Metro**: re-run `adb reverse tcp:8081 tcp:8081` (and ensure the phone is connected).
+- **Permissions dialogs**: Detox installs the app fresh for some suites; the test runner grants runtime permissions automatically, but OEM permission UIs can still vary.
+
 ## Permissions
 
 Geofencing requires:

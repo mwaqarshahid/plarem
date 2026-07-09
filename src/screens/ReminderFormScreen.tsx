@@ -137,10 +137,13 @@ export const ReminderFormScreen: React.FC<RootStackScreenProps<'ReminderForm'>> 
 
   return (
     <ScrollView
+      testID="reminder-form-screen"
       style={{ backgroundColor: theme.colors.background }}
       contentContainerStyle={styles.content}
       keyboardShouldPersistTaps="handled">
       <TextField
+        testID="form-title"
+        errorTestID="form-title-error"
         label="Title"
         placeholder="e.g. Buy eggs"
         value={title}
@@ -154,6 +157,7 @@ export const ReminderFormScreen: React.FC<RootStackScreenProps<'ReminderForm'>> 
       />
 
       <TextField
+        testID="form-description"
         label="Description (optional)"
         placeholder="Any details you want to see in the notification"
         value={description}
@@ -168,6 +172,7 @@ export const ReminderFormScreen: React.FC<RootStackScreenProps<'ReminderForm'>> 
           Location
         </Text>
         <Card
+          testID="form-location-card"
           onPress={() =>
             navigation.navigate('LocationPicker', { initial: location, initialRadius: radius })
           }
@@ -179,6 +184,7 @@ export const ReminderFormScreen: React.FC<RootStackScreenProps<'ReminderForm'>> 
           />
           <View style={styles.locationText}>
             <Text
+              testID="form-location-label"
               numberOfLines={2}
               style={[theme.typography.bodyMedium, { color: theme.colors.onSurface }]}>
               {location
@@ -205,6 +211,7 @@ export const ReminderFormScreen: React.FC<RootStackScreenProps<'ReminderForm'>> 
           {RADIUS_PRESETS.map(preset => (
             <Chip
               key={preset}
+              testID={`form-radius-${preset}`}
               label={formatRadius(preset)}
               selected={radius === preset}
               onPress={() => setRadius(preset)}
@@ -221,6 +228,7 @@ export const ReminderFormScreen: React.FC<RootStackScreenProps<'ReminderForm'>> 
           {CATEGORIES.map(c => (
             <Chip
               key={c.id}
+              testID={`form-category-${c.id}`}
               label={c.label}
               icon={c.icon}
               color={c.color}
@@ -246,6 +254,7 @@ export const ReminderFormScreen: React.FC<RootStackScreenProps<'ReminderForm'>> 
           {PRIORITIES.map(p => (
             <Chip
               key={p.id}
+              testID={`form-priority-${p.id}`}
               label={p.label}
               color={p.color}
               selected={priority === p.id}
@@ -263,6 +272,7 @@ export const ReminderFormScreen: React.FC<RootStackScreenProps<'ReminderForm'>> 
           {NOTIFICATION_SOUNDS.map(s => (
             <Chip
               key={s.id}
+              testID={`form-sound-${s.id}`}
               label={s.label}
               selected={sound === s.id}
               onPress={() => setSound(s.id)}
@@ -277,11 +287,13 @@ export const ReminderFormScreen: React.FC<RootStackScreenProps<'ReminderForm'>> 
         </Text>
         <View style={styles.chipRow}>
           <Chip
+            testID="form-repeat-once"
             label="Once"
             selected={repeat === 'once'}
             onPress={() => setRepeat('once')}
           />
           <Chip
+            testID="form-repeat-every-arrival"
             label="Every arrival"
             selected={repeat === 'every_arrival'}
             onPress={() => setRepeat('every_arrival')}
@@ -299,12 +311,14 @@ export const ReminderFormScreen: React.FC<RootStackScreenProps<'ReminderForm'>> 
           </Text>
         </View>
         <AppSwitch
+          testID="form-enabled-switch"
           value={enabled}
           onValueChange={setEnabled}
         />
       </Card>
 
       <Button
+        testID="form-save"
         label={existing ? 'Update reminder' : 'Create reminder'}
         icon="check"
         onPress={handleSave}

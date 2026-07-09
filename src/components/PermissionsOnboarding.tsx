@@ -80,8 +80,9 @@ export const PermissionsOnboarding: React.FC<PermissionsOnboardingProps> = ({ on
   };
 
   return (
-    <Modal visible animationType="fade" statusBarTranslucent>
+    <Modal visible animationType="fade" statusBarTranslucent testID="onboarding-modal">
       <View
+        testID="onboarding-screen"
         style={[
           styles.container,
           {
@@ -132,7 +133,12 @@ export const PermissionsOnboarding: React.FC<PermissionsOnboardingProps> = ({ on
                 title="Notifications"
                 description="Alert you the moment a reminder fires"
               />
-              <Button label="Continue" icon="arrow-right" onPress={goNext} />
+              <Button
+                testID="onboarding-continue"
+                label="Continue"
+                icon="arrow-right"
+                onPress={goNext}
+              />
             </Card>
           ) : null}
 
@@ -145,12 +151,19 @@ export const PermissionsOnboarding: React.FC<PermissionsOnboardingProps> = ({ on
                 Plarem uses your location on-device to detect geofence arrivals. Nothing is uploaded.
               </Text>
               <Button
+                testID="onboarding-allow-location"
                 label="Allow while using the app"
                 icon="crosshairs-gps"
                 onPress={grantForeground}
                 loading={busy}
               />
-              <Button label="Not now" variant="ghost" onPress={goNext} disabled={busy} />
+              <Button
+                testID="onboarding-skip-location"
+                label="Not now"
+                variant="ghost"
+                onPress={goNext}
+                disabled={busy}
+              />
             </Card>
           ) : null}
 
@@ -164,12 +177,19 @@ export const PermissionsOnboarding: React.FC<PermissionsOnboardingProps> = ({ on
                 access. You can change this later in Settings.
               </Text>
               <Button
+                testID="onboarding-allow-background"
                 label="Allow all the time"
                 icon="map-marker-radius"
                 onPress={grantBackground}
                 loading={busy}
               />
-              <Button label="Skip for now" variant="ghost" onPress={goNext} disabled={busy} />
+              <Button
+                testID="onboarding-skip-background"
+                label="Skip for now"
+                variant="ghost"
+                onPress={goNext}
+                disabled={busy}
+              />
             </Card>
           ) : null}
 
@@ -182,12 +202,19 @@ export const PermissionsOnboarding: React.FC<PermissionsOnboardingProps> = ({ on
                 Get notified the moment you arrive at a reminder location.
               </Text>
               <Button
+                testID="onboarding-allow-notifications"
                 label="Allow notifications"
                 icon="bell-ring-outline"
                 onPress={grantNotifications}
                 loading={busy}
               />
-              <Button label="Skip for now" variant="ghost" onPress={finish} disabled={busy} />
+              <Button
+                testID="onboarding-skip-notifications"
+                label="Skip for now"
+                variant="ghost"
+                onPress={finish}
+                disabled={busy}
+              />
             </Card>
           ) : null}
 

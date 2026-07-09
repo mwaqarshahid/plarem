@@ -13,6 +13,7 @@ interface ButtonProps {
   disabled?: boolean;
   loading?: boolean;
   style?: ViewStyle;
+  testID?: string;
 }
 
 export const Button: React.FC<ButtonProps> = ({
@@ -23,6 +24,7 @@ export const Button: React.FC<ButtonProps> = ({
   disabled,
   loading,
   style,
+  testID,
 }) => {
   const theme = useTheme();
 
@@ -45,6 +47,8 @@ export const Button: React.FC<ButtonProps> = ({
 
   return (
     <Pressable
+      testID={testID}
+      accessibilityLabel={label}
       onPress={onPress}
       disabled={disabled || loading}
       android_ripple={{ color: theme.colors.ripple }}

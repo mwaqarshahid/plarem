@@ -29,11 +29,12 @@ export const AppAlertProvider: React.FC = () => {
     request.buttons.length > 0 ? request.buttons : [{ text: 'OK', style: 'default' as const }];
 
   return (
-    <Modal visible transparent animationType="fade" onRequestClose={close}>
+    <Modal visible transparent animationType="fade" onRequestClose={close} testID="app-alert">
       <Pressable
         style={[styles.backdrop, { backgroundColor: theme.colors.overlay }]}
         onPress={close}>
         <Pressable
+          testID="app-alert-dialog"
           style={[
             styles.dialog,
             {
@@ -53,7 +54,9 @@ export const AppAlertProvider: React.FC = () => {
             ]}>
             <Icon name="information-outline" size={28} color={theme.colors.primary} />
           </View>
-          <Text style={[theme.typography.titleLarge, styles.title, { color: theme.colors.onSurface }]}>
+          <Text
+            testID="app-alert-title"
+            style={[theme.typography.titleLarge, styles.title, { color: theme.colors.onSurface }]}>
             {request.title}
           </Text>
           {request.message ? (
@@ -70,6 +73,7 @@ export const AppAlertProvider: React.FC = () => {
             {buttons.map((button, index) => (
               <Button
                 key={`${button.text}-${index}`}
+                testID={`alert-button-${button.text.toLowerCase().replace(/\s+/g, '-')}`}
                 label={button.text}
                 variant={
                   button.style === 'destructive'

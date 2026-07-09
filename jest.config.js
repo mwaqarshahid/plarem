@@ -7,6 +7,7 @@ module.exports = {
   preset: '@react-native/jest-preset',
   setupFilesAfterEnv: ['<rootDir>/jest/setup.ts'],
   testMatch: ['**/__tests__/**/*.(test|spec).(ts|tsx|js)', '**/?(*.)+(test|spec).(ts|tsx|js)'],
+  testPathIgnorePatterns: ['/node_modules/', '/e2e/', '/android/', '/ios/'],
   moduleNameMapper: {
     '^@components(.*)$': `${src}/components$1`,
     '^@screens(.*)$': `${src}/screens$1`,
