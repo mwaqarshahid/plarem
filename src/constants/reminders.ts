@@ -1,4 +1,4 @@
-import { ReminderPriority, ReminderStatus } from '@types';
+import { ReminderStatus } from '@types';
 
 export const RADIUS_PRESETS = [100, 250, 500, 1000] as const;
 
@@ -13,12 +13,6 @@ export const NOTIFICATION_SOUNDS = [
 ] as const;
 
 export type NotificationSoundId = (typeof NOTIFICATION_SOUNDS)[number]['id'];
-
-export const PRIORITIES: { id: ReminderPriority; label: string; color: string }[] = [
-  { id: 'low', label: 'Low', color: '#1F9D5B' },
-  { id: 'medium', label: 'Medium', color: '#E8930C' },
-  { id: 'high', label: 'High', color: '#DC3A45' },
-];
 
 export const STATUS_LABELS: Record<ReminderStatus, string> = {
   pending: 'Pending',

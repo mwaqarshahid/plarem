@@ -142,7 +142,6 @@ export const ReminderDetailsScreen: React.FC<RootStackScreenProps<'ReminderDetai
               : category.label
           }
         />
-        <InfoRow icon="flag-outline" label="Priority" value={reminder.priority} />
         <InfoRow
           icon="repeat"
           label="Repeat"
@@ -192,7 +191,6 @@ export const ReminderDetailsScreen: React.FC<RootStackScreenProps<'ReminderDetai
           testID="details-edit"
           label="Edit"
           icon="pencil-outline"
-          variant="secondary"
           onPress={() => navigation.navigate('ReminderForm', { reminderId: reminder.id })}
         />
         <Button

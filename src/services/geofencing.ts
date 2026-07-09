@@ -2,8 +2,7 @@ import Geofencing from '@rn-org/react-native-geofencing';
 import { markTriggered, store, updateReminder } from '@store';
 import { Reminder } from '@types';
 
-const shouldMonitor = (reminder: Reminder): boolean =>
-  reminder.enabled && reminder.status === 'pending';
+const shouldMonitor = (reminder: Reminder): boolean => reminder.status === 'pending';
 
 /**
  * Reconciles the OS geofence registrations with the reminders in the store:
@@ -18,7 +17,7 @@ export const syncGeofences = async (): Promise<void> => {
   reminders
     .filter(r => r.expiresAt !== undefined && r.expiresAt < now && r.status === 'pending')
     .forEach(r =>
-      store.dispatch(updateReminder({ id: r.id, changes: { status: 'expired', enabled: false } })),
+      store.dispatch(updateReminder({ id: r.id, changes: { status: 'expired' } })),
     );
 
   const current = store.getState().reminders.items;

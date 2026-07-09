@@ -12,11 +12,8 @@ const draft: ReminderDraft = {
   description: 'A dozen, free range',
   location: { latitude: 24.86, longitude: 67.0, address: 'City Supermarket' },
   radius: 250,
-  priority: 'medium',
   category: 'shopping',
   repeat: 'once',
-  sound: 'default',
-  enabled: true,
 };
 
 describe('remindersSlice', () => {
@@ -25,11 +22,6 @@ describe('remindersSlice', () => {
     expect(state.items).toHaveLength(1);
     expect(state.items[0].id).toBeTruthy();
     expect(state.items[0].status).toBe('pending');
-  });
-
-  it('adds a disabled reminder with disabled status', () => {
-    const state = reducer(undefined, addReminder({ ...draft, enabled: false }));
-    expect(state.items[0].status).toBe('disabled');
   });
 
   it('updates fields and bumps updatedAt', () => {
@@ -44,7 +36,6 @@ describe('remindersSlice', () => {
     const id = state.items[0].id;
     state = reducer(state, markTriggered({ id, at: 123 }));
     expect(state.items[0].status).toBe('completed');
-    expect(state.items[0].enabled).toBe(false);
     expect(state.items[0].lastTriggeredAt).toBe(123);
   });
 
@@ -53,14 +44,15 @@ describe('remindersSlice', () => {
     const id = state.items[0].id;
     state = reducer(state, markTriggered({ id, at: 123 }));
     expect(state.items[0].status).toBe('pending');
-    expect(state.items[0].enabled).toBe(true);
   });
 
-  it('re-enables when status set back to pending', () => {
-    let state = reducer(undefined, addReminder({ ...draft, enabled: false }));
+  it('updates status via setReminderStatus', () => {
+    let state = reducer(undefined, addReminder(draft));
     const id = state.items[0].id;
+    state = reducer(state, setReminderStatus({ id, status: 'disabled' }));
+    expect(state.items[0].status).toBe('disabled');
     state = reducer(state, setReminderStatus({ id, status: 'pending' }));
-    expect(state.items[0].enabled).toBe(true);
+    expect(state.items[0].status).toBe('pending');
   });
 
   it('deletes reminders', () => {

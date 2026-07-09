@@ -11,20 +11,17 @@ const reminder: Reminder = {
   location: { latitude: 24.86, longitude: 67.0, address: 'City Supermarket' },
   radius: 250,
   status: 'pending',
-  priority: 'medium',
   category: 'shopping',
   repeat: 'once',
-  sound: 'default',
-  enabled: true,
   createdAt: 1,
   updatedAt: 1,
 };
 
 describe('ReminderCard', () => {
-  it('shows reminder details and toggles enabled state', async () => {
-    const onToggleEnabled = jest.fn();
+  it('shows reminder details and toggles active state', async () => {
+    const onToggleActive = jest.fn();
     const { getByText, getByRole } = await renderWithProviders(
-      <ReminderCard reminder={reminder} onPress={jest.fn()} onToggleEnabled={onToggleEnabled} />,
+      <ReminderCard reminder={reminder} onPress={jest.fn()} onToggleActive={onToggleActive} />,
     );
 
     expect(getByText('Buy groceries')).toBeOnTheScreen();
@@ -34,6 +31,6 @@ describe('ReminderCard', () => {
     expect(getByText('Pending')).toBeOnTheScreen();
 
     fireEvent(getByRole('switch'), 'valueChange', false);
-    expect(onToggleEnabled).toHaveBeenCalledWith(false);
+    expect(onToggleActive).toHaveBeenCalledWith(false);
   });
 });
