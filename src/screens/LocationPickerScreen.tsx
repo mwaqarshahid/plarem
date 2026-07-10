@@ -15,8 +15,7 @@ import { useTheme } from '@theme';
 import { Button, Chip, Icon, TextField } from '@components';
 import {
   getCachedLocation,
-  getCurrentPosition,
-  getCurrentPositionFast,
+  getFreshPosition,
   PlaceSuggestion,
   requestForegroundLocation,
   reverseGeocode,
@@ -24,9 +23,8 @@ import {
   setCachedLocation,
   warmUpLocation,
 } from '@services';
-import type { Coordinates } from '@services';
+import type { ReminderLocation } from '@types';
 import { DEFAULT_MAP_REGION, DEFAULT_RADIUS_METERS, GOOGLE_MAPS_API_KEY, RADIUS_PRESETS } from '@constants';
-import { ReminderLocation } from '@types';
 import { showAlert } from '@utils/alert';
 import type { RootStackScreenProps } from '@navigation/types';
 
@@ -78,7 +76,6 @@ export const LocationPickerScreen: React.FC<RootStackScreenProps<'LocationPicker
   const [resolving, setResolving] = useState(false);
   const [locating, setLocating] = useState(false);
   const [centeringMap, setCenteringMap] = useState(!initial && !getCachedLocation());
-  const userLocationRef = useRef<Coordinates | undefined>(getCachedLocation());
 
   useEffect(() => {
     if (!GOOGLE_MAPS_API_KEY) {
@@ -119,7 +116,7 @@ export const LocationPickerScreen: React.FC<RootStackScreenProps<'LocationPicker
     [animateTo],
   );
 
-  // Refine map center in the background using a warmed/cached fix.
+  // Refine map center in the background — approximate only; never poisons cache.
   useEffect(() => {
     if (initial) {
       return;
@@ -131,8 +128,6 @@ export const LocationPickerScreen: React.FC<RootStackScreenProps<'LocationPicker
         setCenteringMap(false);
         return;
       }
-      userLocationRef.current = position;
-      setCachedLocation(position);
       animateTo(position.latitude, position.longitude);
       setCenteringMap(false);
     })();
@@ -172,14 +167,7 @@ export const LocationPickerScreen: React.FC<RootStackScreenProps<'LocationPicker
     }
     setLocating(true);
     try {
-      const position =
-        (await getCurrentPositionFast().catch(() => getCurrentPosition(true)).catch(() => undefined)) ??
-        userLocationRef.current ??
-        getCachedLocation();
-      if (!position) {
-        throw new Error('Location unavailable');
-      }
-      userLocationRef.current = position;
+      const position = await getFreshPosition();
       setCachedLocation(position);
       await selectCoordinate(position.latitude, position.longitude);
     } catch {

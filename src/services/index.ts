@@ -3,4 +3,6 @@ export * from './location';
 export * from './locationCache';
 export * from './places';
 export * from './notifications';
+export * from './foregroundService';
+export * from './geofenceFallback';
 export * from './geofencing';

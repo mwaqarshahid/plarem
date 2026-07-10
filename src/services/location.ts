@@ -36,6 +36,10 @@ export const getCurrentPosition = (
     );
   });
 
-/** Prefer cached/network fix — fast for map centering on open. */
+/** Prefer cached/network fix — fast for map centering on open. Never use for reminder pins. */
 export const getCurrentPositionFast = (): Promise<Coordinates> =>
   getCurrentPosition(false, { enableHighAccuracy: false, timeout: 4000, maximumAge: 600000 });
+
+/** Fresh GPS fix for "current location" and geofence registration — no stale fallbacks. */
+export const getFreshPosition = (): Promise<Coordinates> =>
+  getCurrentPosition(true, { enableHighAccuracy: true, timeout: 15000, maximumAge: 0 });

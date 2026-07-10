@@ -11,7 +11,12 @@ export const setCachedLocation = (coords: Coordinates): void => {
   cached = coords;
 };
 
-/** Resolve a position quickly, using cache when GPS is slow. */
+/**
+ * Resolve a position quickly for map centering / nearby hints.
+ * Fast/network fixes are returned but NOT written to the shared cache — only
+ * a fresh high-accuracy fix may update it, so "current location" never
+ * inherits a stale preload from splash or a previous city.
+ */
 export const warmUpLocation = async (): Promise<Coordinates | undefined> => {
   if (warmPromise) {
     return warmPromise;
@@ -24,9 +29,7 @@ export const warmUpLocation = async (): Promise<Coordinates | undefined> => {
       }
 
       try {
-        const position = await getCurrentPositionFast();
-        cached = position;
-        return position;
+        return await getCurrentPositionFast();
       } catch {
         try {
           const position = await getCurrentPosition(true);

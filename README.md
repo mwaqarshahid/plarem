@@ -5,9 +5,12 @@ Plarem is a location-based reminder app for Android and iOS built with React Nat
 ## How it works
 
 1. You create a reminder with a title, location, and arrival radius.
-2. Plarem registers a **geofence with the operating system** (Google Play Services `GeofencingClient` on Android, `CLLocationManager` region monitoring on iOS). No continuous GPS polling, so battery impact is minimal.
-3. When the device enters the radius — even if the app is closed — the OS wakes Plarem in the background (headless JS on Android) and a local notification is shown via Notifee.
-4. Tapping the notification opens the reminder.
+2. Plarem registers a **geofence with the operating system** (Google Play Services `GeofencingClient` on Android, `CLLocationManager` region monitoring on iOS).
+3. While you have active reminders, Android runs a **low-power foreground location service** (`FusedLocationProviderClient`, balanced-power). This keeps the process alive and feeds the OS fresh fixes so geofence transitions fire within seconds instead of being missed while you drive through a fence. A software distance-check runs off the same location stream as a fallback, independent of Play Services.
+4. When the device enters the radius — even if the app is closed — Plarem is woken in the background (headless JS on Android) and a local notification is shown via Notifee.
+5. Tapping the notification opens the reminder.
+
+> **Why the foreground service?** Play Services geofencing is *opportunistic* — it only re-evaluates fences when the OS happens to receive a location fix. With no active location client and the app killed (or throttled by an OEM battery manager), fixes can be minutes apart, so a fence driven through at speed is frequently never sampled. Holding a live, low-power location request is the documented fix and is what dedicated (paid) background-geolocation libraries do internally.
 
 ## Tech stack
 
@@ -63,7 +66,7 @@ GOOGLE_MAPS_API_KEY=your_key_here
 
 3. Enable these APIs for that key: **Maps SDK for Android**, **Places API**, and **Geocoding API** (plus **Maps SDK for iOS** if you build for iOS).
 
-The same `.env` value is used for native map tiles (Android manifest / iOS Info.plist) and for JS place search + geocoding. Run `npm run android` (or `ios`) after changing the key so native builds pick it up.
+The same `.env` value is synced at build time into generated, gitignored files (`src/constants/env.generated.ts`, `ios/Plarem/GoogleMapsApiKey.plist`) and into the Android manifest via Gradle. **Never commit `.env` or run `git add` after `npm start` / `sync-env` without checking for stamped secrets.** Run `npm run android` (or `ios`) after changing the key so native builds pick it up.
 
 ### Run (Android)
 
@@ -151,14 +154,16 @@ Geofencing requires:
 
 - **Location — "Allow all the time"** (Android 10+) or **Always** (iOS). Without background location, reminders only trigger while the app is open.
 - **Notifications** (Android 13+ / iOS).
+- **Background activity / battery-optimization exemption** (Android). Requested during onboarding. Many OEMs (Samsung, Xiaomi, Oppo, etc.) aggressively kill background apps; without this, the monitoring service can be stopped and reminders will be missed.
 
-The app requests these when you save your first enabled reminder, and the Settings screen shows their current state.
+The app requests these during onboarding, and the Settings screen shows their current state.
 
 ## Testing geofences
 
-- Android emulator: set a route or single location in the emulator's Extended Controls → Location.
-- Expect up to ~2 minutes of latency after entering a fence (OS batching); this is normal geofencing behavior.
+- Android emulator: set a route or single location in the emulator's Extended Controls → Location. Drive a **route** (not a single teleport) so the foreground service and the software fallback both get a stream of fixes.
+- With the foreground service active, transitions typically fire within seconds; without an active location client, Play Services geofencing alone can lag several minutes or miss a drive-through entirely.
 - Radii below ~100 m are unreliable outdoors; presets start at 100 m.
+- Confirm registration: `syncGeofences` records a `GeofenceSyncReport` (see `getLastGeofenceSyncReport`) listing any reminders the OS refused to arm.
 
 ## Roadmap (not in MVP)
 

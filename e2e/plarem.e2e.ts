@@ -89,7 +89,7 @@ describe('Settings', () => {
 });
 
 // Skipped: location picker + save flow is flaky on real Samsung devices (map/GPS/permissions).
-describe.skip('Reminder CRUD', () => {
+describe('Reminder CRUD', () => {
   beforeAll(async () => {
     await launchFresh();
     await skipOnboarding();
@@ -146,7 +146,7 @@ describe.skip('Reminder CRUD', () => {
 });
 
 // Skipped: same device-specific form/scroll issues as Reminder CRUD.
-describe.skip('Form validation', () => {
+describe('Form validation', () => {
   beforeEach(async () => {
     await launchFresh();
     await skipOnboarding();

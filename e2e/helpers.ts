@@ -11,6 +11,10 @@ export const skipOnboarding = async (): Promise<void> => {
   await element(by.id('onboarding-continue')).tap();
   await element(by.id('onboarding-skip-location')).tap();
   await element(by.id('onboarding-skip-background')).tap();
+  if (device.getPlatform() === 'android') {
+    // Battery-optimization exemption step exists on Android only.
+    await element(by.id('onboarding-skip-battery')).tap();
+  }
   await element(by.id('onboarding-skip-notifications')).tap();
 
   await waitFor(element(by.id('home-screen')))
@@ -18,7 +22,23 @@ export const skipOnboarding = async (): Promise<void> => {
     .withTimeout(10000);
 };
 
+/** Wake the screen and dismiss the keyguard — an attached device with a dark
+ * or locked screen never gives the app window focus, failing every matcher. */
+export const wakeDevice = (): void => {
+  if (device.getPlatform() !== 'android') {
+    return;
+  }
+  try {
+    adbShell('input keyevent KEYCODE_WAKEUP');
+    adbShell('wm dismiss-keyguard');
+    adbShell('settings put global stay_on_while_plugged_in 7');
+  } catch {
+    // Best effort; emulators are already awake.
+  }
+};
+
 export const launchFresh = async (): Promise<void> => {
+  wakeDevice();
   await device.launchApp({
     newInstance: true,
     delete: true,
@@ -28,6 +48,12 @@ export const launchFresh = async (): Promise<void> => {
 
 const getAdbSerial = (): string | undefined =>
   process.env.ANDROID_SERIAL || device.id || undefined;
+
+const adbShell = (command: string): string => {
+  const serial = getAdbSerial();
+  const adb = serial ? `adb -s ${serial}` : 'adb';
+  return execSync(`${adb} shell ${command}`, { encoding: 'utf8' });
+};
 
 /** Grant runtime permissions so reminders can save without system dialogs. */
 export const grantAndroidPermissions = (): void => {
@@ -59,6 +85,14 @@ export const grantAndroidPermissions = (): void => {
   } catch {
     // Some OEM builds reject appops overrides.
   }
+
+  try {
+    // Battery-optimization exemption, mirroring the onboarding "Allow
+    // background activity" step, so the monitoring service survives Doze.
+    execSync(`${adb} shell dumpsys deviceidle whitelist +${ANDROID_PACKAGE}`, { stdio: 'ignore' });
+  } catch {
+    // Non-fatal on OEMs that reject the whitelist command.
+  }
 };
 
 export const dismissAlertIfVisible = async (): Promise<void> => {
@@ -79,6 +113,8 @@ export const openCreateReminder = async (): Promise<void> => {
     .withTimeout(8000);
 };
 
+const settle = (ms = 600): Promise<void> => new Promise(resolve => setTimeout(resolve, ms));
+
 export const scrollFormTo = async (testID: string): Promise<void> => {
   const target = element(by.id(testID));
   const scrollView = element(by.id('reminder-form-screen'));
@@ -93,6 +129,9 @@ export const scrollFormTo = async (testID: string): Promise<void> => {
   for (let attempt = 0; attempt < 14; attempt += 1) {
     try {
       await waitFor(target).toBeVisible().withTimeout(600);
+      // A tap during scroll deceleration is consumed as "stop scrolling"
+      // instead of a click — give the ScrollView a moment to settle.
+      await settle();
       return;
     } catch {
       await scrollView.scroll(380, attempt < 8 ? 'down' : 'up', 0.5, 0.5);
@@ -100,6 +139,7 @@ export const scrollFormTo = async (testID: string): Promise<void> => {
   }
 
   await waitFor(target).toBeVisible().withTimeout(8000);
+  await settle();
 };
 
 export const scrollDetailsTo = async (testID: string): Promise<void> => {
@@ -195,9 +235,17 @@ export const openReminderFromHome = async (title: string): Promise<void> => {
   await waitFor(element(by.id('home-screen')))
     .toBeVisible()
     .withTimeout(8000);
-  await waitFor(element(by.text(title)))
-    .toBeVisible()
-    .withTimeout(8000);
+  try {
+    await waitFor(element(by.text(title)))
+      .toBeVisible()
+      .withTimeout(4000);
+  } catch {
+    // Long list — scroll until the card is on screen.
+    await waitFor(element(by.text(title)))
+      .toBeVisible()
+      .whileElement(by.id('home-reminder-list'))
+      .scroll(300, 'down');
+  }
   await element(by.text(title)).tap();
   await waitFor(element(by.id('reminder-details-screen')))
     .toBeVisible()
