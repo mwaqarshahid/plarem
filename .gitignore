@@ -42,6 +42,7 @@ local.properties
 
 # Generated
 src/constants/env.generated.ts
+ios/Plarem/GoogleMapsApiKey.plist
 
 # Local debugging screenshots
 .tmp-ui/
@@ -78,6 +79,10 @@ yarn-error.log
 /coverage
 /artifacts
 .detoxrc.local.js
+
+# Tester release APKs (npm run android:release:copy)
+dist/
+release-build.log
 
 # Yarn
 .yarn/*

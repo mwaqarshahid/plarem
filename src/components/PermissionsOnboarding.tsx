@@ -1,11 +1,15 @@
 import React, { useState } from 'react';
-import { Modal, ScrollView, StyleSheet, Text, View, ViewStyle } from 'react-native';
+import { Modal, Platform, ScrollView, StyleSheet, Text, View, ViewStyle } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useTheme, type ThemeColors } from '@theme';
 import {
+  getFreshPosition,
+  isIgnoringBatteryOptimizations,
   requestBackgroundLocation,
   requestForegroundLocation,
+  requestIgnoreBatteryOptimizations,
   requestNotifications,
+  setCachedLocation,
   warmUpLocation,
 } from '@services';
 import { APP_MOTTO, APP_NAME, APP_TAGLINE } from '@constants';
@@ -13,13 +17,17 @@ import { Button } from './Button';
 import { Card } from './Card';
 import { Icon } from './Icon';
 
-type Step = 'welcome' | 'location' | 'background' | 'notifications';
+type Step = 'welcome' | 'location' | 'background' | 'battery' | 'notifications';
 
 interface PermissionsOnboardingProps {
   onComplete: () => void;
 }
 
-const STEPS: Step[] = ['welcome', 'location', 'background', 'notifications'];
+// The battery-optimization exemption is Android-only; it keeps our monitoring
+// service alive on aggressive OEM battery managers.
+const STEPS: Step[] = (
+  ['welcome', 'location', 'background', 'battery', 'notifications'] as Step[]
+).filter(step => step !== 'battery' || Platform.OS === 'android');
 
 const stepDotStyle = (active: boolean, colors: ThemeColors): ViewStyle => ({
   backgroundColor: active ? colors.primary : colors.outline,
@@ -52,7 +60,11 @@ export const PermissionsOnboarding: React.FC<PermissionsOnboardingProps> = ({ on
     setBusy(true);
     try {
       await requestForegroundLocation();
-      await warmUpLocation();
+      try {
+        setCachedLocation(await getFreshPosition());
+      } catch {
+        await warmUpLocation();
+      }
     } finally {
       setBusy(false);
       goNext();
@@ -63,6 +75,18 @@ export const PermissionsOnboarding: React.FC<PermissionsOnboardingProps> = ({ on
     setBusy(true);
     try {
       await requestBackgroundLocation();
+    } finally {
+      setBusy(false);
+      goNext();
+    }
+  };
+
+  const grantBattery = async (): Promise<void> => {
+    setBusy(true);
+    try {
+      if (!(await isIgnoringBatteryOptimizations())) {
+        requestIgnoreBatteryOptimizations();
+      }
     } finally {
       setBusy(false);
       goNext();
@@ -185,6 +209,32 @@ export const PermissionsOnboarding: React.FC<PermissionsOnboardingProps> = ({ on
               />
               <Button
                 testID="onboarding-skip-background"
+                label="Skip for now"
+                variant="ghost"
+                onPress={goNext}
+                disabled={busy}
+              />
+            </Card>
+          ) : null}
+
+          {step === 'battery' ? (
+            <Card style={styles.card}>
+              <Text style={[theme.typography.titleLarge, { color: theme.colors.onSurface }]}>
+                Keep reminders running
+              </Text>
+              <Text style={[theme.typography.bodyMedium, styles.body, { color: theme.colors.onSurfaceVariant }]}>
+                Some phones aggressively close background apps to save battery, which can stop
+                reminders from firing. Allow Plarem to keep monitoring so arrivals are never missed.
+              </Text>
+              <Button
+                testID="onboarding-allow-battery"
+                label="Allow background activity"
+                icon="battery-heart-variant"
+                onPress={grantBattery}
+                loading={busy}
+              />
+              <Button
+                testID="onboarding-skip-battery"
                 label="Skip for now"
                 variant="ghost"
                 onPress={goNext}

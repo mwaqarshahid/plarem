@@ -148,6 +148,9 @@ dependencies {
     implementation("com.facebook.react:react-android")
     androidTestImplementation('com.wix:detox:+')
     implementation('androidx.appcompat:appcompat:1.6.1')
+    // Foreground location service for reliable geofencing (matches the version
+    // used by @rn-org/react-native-geofencing to avoid a version conflict).
+    implementation('com.google.android.gms:play-services-location:21.3.0')
 
     if (hermesEnabled.toBoolean()) {
         implementation("com.facebook.react:hermes-android")

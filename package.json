@@ -4,6 +4,9 @@
   "private": true,
   "scripts": {
     "android": "node scripts/sync-env.js && react-native run-android",
+    "android:release": "node scripts/build-android-release.js",
+    "android:release:copy": "node scripts/copy-release-apk.js",
+    "android:release:install": "npm run android:release && npm run android:release:copy && adb install -r dist/plarem-release.apk",
     "ios": "node scripts/sync-env.js && react-native run-ios",
     "lint": "eslint .",
     "start": "node scripts/start-metro.js",

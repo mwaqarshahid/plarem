@@ -31,6 +31,7 @@ jest.mock('react-native-mmkv', () => ({
 }));
 
 jest.mock('@notifee/react-native', () => ({
+  __esModule: true,
   AndroidImportance: { HIGH: 4 },
   AuthorizationStatus: { AUTHORIZED: 1 },
   EventType: { PRESS: 1 },
