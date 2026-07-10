@@ -29,11 +29,7 @@ const insideState = new Map<string, boolean>();
 
 let initialized = false;
 
-/**
- * Run the software geofence check for a single fix. Exported for testing and
- * for callers that already have a timestamp; most callers use `checkGeofencesAt`.
- */
-export const runGeofenceCheck = async (
+const runGeofenceCheck = async (
   coords: Coordinates,
   now: number,
 ): Promise<void> => {
@@ -84,11 +80,6 @@ export const runGeofenceCheck = async (
 export const checkGeofencesAt = (coords: Coordinates): void => {
   setCachedLocation(coords);
   runGeofenceCheck(coords, Date.now()).catch(() => undefined);
-};
-
-/** Reset the in-memory inside/outside tracking. Testing helper. */
-export const resetGeofenceFallback = (): void => {
-  insideState.clear();
 };
 
 /**

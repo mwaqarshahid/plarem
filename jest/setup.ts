@@ -82,7 +82,7 @@ jest.mock('react-native-permissions', () => ({
 jest.mock('@react-native-community/geolocation', () => ({
   setRNConfiguration: jest.fn(),
   getCurrentPosition: jest.fn((success: (pos: unknown) => void) =>
-    success({ coords: { latitude: 24.86, longitude: 67.0 } }),
+    success({ coords: { latitude: 31.52, longitude: 74.35 } }),
   ),
 }));
 
