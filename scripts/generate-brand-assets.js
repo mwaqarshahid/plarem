@@ -14,8 +14,10 @@ const SVG_DIR = path.join(BRAND, 'svg');
 const EXPORT = path.join(BRAND, 'export');
 
 const COLORS = {
-  primary: '#4F5BE8',
-  secondary: '#00A98F',
+  ink: mark.C.ink,
+  tileLight: mark.C.tileLight,
+  tileDark: mark.C.tileDark,
+  launcherBg: '#97999D',
   lightBg: '#F6F7FB',
   darkBg: '#0F1117',
   white: '#FFFFFF',
@@ -97,9 +99,9 @@ const solidSvg = (color, width, height) =>
 const gradientSvg = (width, height) =>
   Buffer.from(`<svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}">
   <defs>
-    <linearGradient id="g" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="${COLORS.primary}"/>
-      <stop offset="100%" stop-color="${COLORS.secondary}"/>
+    <linearGradient id="g" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="${COLORS.tileLight}"/>
+      <stop offset="100%" stop-color="${COLORS.tileDark}"/>
     </linearGradient>
   </defs>
   <rect width="100%" height="100%" fill="url(#g)"/>
@@ -112,21 +114,25 @@ const splashSvg = (mode, orientation, formFactor) => {
   const isTablet = formFactor === 'tablet';
   const width = isLandscape ? (isTablet ? 2732 : 1920) : isTablet ? 2048 : 1080;
   const height = isLandscape ? (isTablet ? 2048 : 1080) : isTablet ? 2732 : 1920;
-  const logoSize = isTablet ? 300 : 260;
+  const logoSize = isTablet ? 340 : 300;
+  const nameSize = isTablet ? 96 : 76;
+  const mottoSize = isTablet ? 40 : 30;
+  const nameY = height / 2 + 84;
+  const mottoY = nameY + (isTablet ? 78 : 62);
   const subtitle = isDark ? '#A3A7B8' : '#5C6070';
-  const subtitleY = height / 2 + (isTablet ? 108 : 96);
-  const logoY = height / 2 - logoSize / 2 - 48;
+  // The mark's pin tail reaches ~89% of the logo box — keep it clear of the wordmark.
+  const logoY = height / 2 - logoSize / 2 - 130;
   return Buffer.from(`<svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}">
   <rect width="100%" height="100%" fill="${bg}"/>
   <g transform="translate(${width / 2 - logoSize / 2}, ${logoY})">
-    ${mark.splashMarkSvg(COLORS.primary, COLORS.secondary, logoSize)}
+    ${mark.splashMarkSvg(isDark, logoSize)}
   </g>
-  <text x="${width / 2}" y="${height / 2 + 40}" text-anchor="middle"
-    font-family="Segoe UI, system-ui, sans-serif" font-size="${isTablet ? 56 : 44}" font-weight="700"
-    fill="${isDark ? '#E9EAF2' : '#171A23'}">Plarem</text>
-  <text x="${width / 2}" y="${subtitleY}" text-anchor="middle"
-    font-family="Segoe UI, system-ui, sans-serif" font-size="${isTablet ? 24 : 18}"
-    fill="${subtitle}">Arrive. Remember.</text>
+  <text x="${width / 2}" y="${nameY}" text-anchor="middle"
+    font-family="Segoe UI, system-ui, sans-serif" font-size="${nameSize}" font-weight="700"
+    letter-spacing="1" fill="${isDark ? '#E9EAF2' : '#171A23'}">${mark.IDENTITY.name}</text>
+  <text x="${width / 2}" y="${mottoY}" text-anchor="middle"
+    font-family="Segoe UI, system-ui, sans-serif" font-size="${mottoSize}" font-weight="500"
+    letter-spacing="3" fill="${subtitle}">${mark.IDENTITY.motto}</text>
 </svg>`);
 };
 
@@ -195,10 +201,10 @@ async function exportAndroid() {
   for (const [density, size] of Object.entries(ANDROID_MIPMAP)) {
     const dir = path.join(out, 'mipmap', `mipmap-${density}`);
     await renderSvg(master, path.join(dir, 'ic_launcher.png'), size, {
-      flatten: COLORS.primary,
+      flatten: COLORS.launcherBg,
     });
     await renderSvg(master, path.join(dir, 'ic_launcher_round.png'), size, {
-      flatten: COLORS.primary,
+      flatten: COLORS.launcherBg,
     });
   }
 
@@ -207,14 +213,14 @@ async function exportAndroid() {
     await renderSvg(svgPath('ic_launcher_foreground.svg'), path.join(dir, 'ic_launcher_foreground.png'), size, {
       background: { r: 0, g: 0, b: 0, alpha: 0 },
     });
-    await renderSvg(solidSvg(COLORS.primary, size, size), path.join(dir, 'ic_launcher_background.png'), size);
+    await renderSvg(solidSvg(COLORS.launcherBg, size, size), path.join(dir, 'ic_launcher_background.png'), size);
     await renderSvg(gradientSvg(size, size), path.join(dir, 'ic_launcher_background_gradient.png'), size);
   }
 
   ensureDir(path.join(out, 'values'));
   fs.writeFileSync(
     path.join(out, 'values', 'ic_launcher_background.xml'),
-    `<?xml version="1.0" encoding="utf-8"?>\n<resources>\n    <color name="ic_launcher_background">${COLORS.primary}</color>\n</resources>\n`,
+    `<?xml version="1.0" encoding="utf-8"?>\n<resources>\n    <color name="ic_launcher_background">${COLORS.launcherBg}</color>\n</resources>\n`,
   );
 
   ensureDir(path.join(out, 'mipmap-anydpi-v26'));
@@ -326,13 +332,13 @@ async function exportStore() {
     path.join(out, 'google-play-feature-graphic-1024x500.png'),
     1024,
     500,
-    { flatten: COLORS.primary },
+    { flatten: COLORS.lightBg },
   );
   await renderSvg(svgPath('app-icon-gradient.svg'), path.join(out, 'google-play-icon-512x512.png'), 512, {
-    flatten: COLORS.primary,
+    flatten: COLORS.tileDark,
   });
   await renderSvg(svgPath('app-icon-gradient.svg'), path.join(out, 'app-store-icon-1024x1024.png'), 1024, {
-    flatten: COLORS.primary,
+    flatten: COLORS.tileDark,
   });
 }
 

@@ -2,13 +2,13 @@
 
 Production-ready brand assets for Android and iOS.
 
-## Brand mark — "Arrival Zone"
+## Brand mark — "Place Reminder"
 
-The Plarem mark tells the product story in one glance:
+The Plarem mark fuses an alarm clock with a place pin:
 
-- **Geofence arc** — Plarem monitors a boundary around a place
-- **Place pin** — the location you chose
-- **Teal trigger dot** — the moment you arrive and the reminder fires
+- **Place pin** — the location you chose (charcoal ball + lime tail chevron)
+- **GPS arrow** — blue navigation arrow at the center; location services
+- **Alarm bells** — two arcs above the ball; the reminder that rings on arrival
 
 All SVG masters are generated from a single source of truth: `brand/mark.js`.  
 Edit that file, then run `npm run brand:generate`.
@@ -30,8 +30,11 @@ Requires Node.js and the `sharp` dev dependency.
 
 | Token | Hex | Usage |
 |-------|-----|-------|
-| Primary | `#4F5BE8` | Logo, app icon, accents |
-| Secondary | `#00A98F` | Gradients, highlights |
+| Ink (charcoal) | `#1E2126` | Clock body, bells, wordmark |
+| Arrow blue | `#2B9FD8` | GPS arrow |
+| Lime | `#D7DF23` | Pin-tail chevron |
+| Tile gradient | `#A2A4A7` → `#4B4D52` | App-icon background |
+| Launcher background | `#97999D` | Android adaptive-icon background |
 | Light background | `#F6F7FB` | Splash (light) |
 | Dark background | `#0F1117` | Splash (dark) |
 
@@ -68,7 +71,7 @@ PNG exports: `brand/export/logo/`
 | Gradient background | `mipmap-*/ic_launcher_background_gradient.png` |
 | Adaptive XML | `mipmap-anydpi-v26/ic_launcher.xml` |
 
-Background color resource: `values/ic_launcher_background.xml` (`#4F5BE8`)
+Background color resource: `values/ic_launcher_background.xml` (`#97999D`)
 
 ## 4. Android launcher icons
 

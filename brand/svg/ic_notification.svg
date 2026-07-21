@@ -1,6 +1,14 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none">
-  <g transform="translate(12, 12.2) scale(0.11) translate(-64, -57)">
-    <path d="M64 24 C49.5 24 39 35 39 48.5 C39 55.5 48.5 67 64 91 C79.5 67 89 55.5 89 48.5 C89 35 78.5 24 64 24 Z" fill="#FFFFFF"/>
-    <circle cx="64" cy="47" r="11.5" fill="#FFFFFF" opacity="0.28"/>
+  <defs>
+    <mask id="arrow-cut">
+      <rect x="-32" y="-32" width="192" height="192" fill="#FFFFFF"/>
+      <g transform="translate(64, 54) rotate(42)"><path d="M 0 -15 L 10.5 12 L 0 5.5 L -10.5 12 Z" fill="#000000"/></g>
+    </mask>
+  </defs>
+  <g transform="translate(12, 12) scale(0.185) translate(-64, -60)">
+    <g mask="url(#arrow-cut)"><path d="M 25.4 43.6 A 40 40 0 0 1 47.1 17.7" fill="none" stroke="#FFFFFF" stroke-width="7" stroke-linecap="round"/>
+  <path d="M 80.9 17.7 A 40 40 0 0 1 102.6 43.6" fill="none" stroke="#FFFFFF" stroke-width="7" stroke-linecap="round"/>
+  <path d="M 40 68 L 88 68 L 64 106 Z" fill="#FFFFFF"/>
+  <circle cx="64" cy="54" r="30" fill="#FFFFFF"/></g>
   </g>
 </svg>

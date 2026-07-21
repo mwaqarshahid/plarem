@@ -1,6 +1,6 @@
 {
   "name": "Plarem",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "private": true,
   "scripts": {
     "android": "node scripts/sync-env.js && react-native run-android",
