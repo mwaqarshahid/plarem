@@ -1,3 +1,5 @@
+import { BRAND } from '../constants/brand';
+
 export interface ThemeColors {
   primary: string;
   onPrimary: string;
@@ -21,36 +23,37 @@ export interface ThemeColors {
   overlay: string;
 }
 
+/** UI theme keyed to the Plarem brand palette (arrow blue + ink + lime accents). */
 export const lightColors: ThemeColors = {
-  primary: '#4F5BE8',
-  onPrimary: '#FFFFFF',
-  primaryContainer: '#E1E3FF',
-  onPrimaryContainer: '#1A1D66',
-  secondary: '#00A98F',
-  onSecondary: '#FFFFFF',
+  primary: BRAND.arrow,
+  onPrimary: BRAND.white,
+  primaryContainer: '#D7EEF8',
+  onPrimaryContainer: '#0A3A52',
+  secondary: BRAND.ink,
+  onSecondary: BRAND.white,
   background: '#F6F7FB',
   surface: '#FFFFFF',
-  surfaceVariant: '#EEF0F7',
-  onSurface: '#171A23',
+  surfaceVariant: '#EEF0F3',
+  onSurface: BRAND.ink,
   onSurfaceVariant: '#5C6070',
-  outline: '#C6C9D6',
-  error: '#DC3A45',
+  outline: '#C6C9D0',
+  error: '#C94B5A',
   onError: '#FFFFFF',
-  success: '#1F9D5B',
-  warning: '#E8930C',
+  success: '#5B8C1A',
+  warning: '#C4A014',
   card: '#FFFFFF',
-  border: '#E4E6EF',
-  ripple: 'rgba(79, 91, 232, 0.12)',
-  overlay: 'rgba(15, 17, 26, 0.45)',
+  border: '#E4E6EB',
+  ripple: 'rgba(43, 159, 216, 0.14)',
+  overlay: 'rgba(30, 33, 38, 0.45)',
 };
 
 export const darkColors: ThemeColors = {
-  primary: '#9BA3FF',
-  onPrimary: '#151845',
-  primaryContainer: '#4650BE',
-  onPrimaryContainer: '#E1E3FF',
-  secondary: '#3DD9BD',
-  onSecondary: '#00382E',
+  primary: '#5BB8E0',
+  onPrimary: '#062636',
+  primaryContainer: '#1A4F66',
+  onPrimaryContainer: '#D7EEF8',
+  secondary: '#E8EAED',
+  onSecondary: BRAND.ink,
   background: '#0F1117',
   surface: '#181B24',
   surfaceVariant: '#232733',
@@ -59,10 +62,10 @@ export const darkColors: ThemeColors = {
   outline: '#4A4E5F',
   error: '#FF7A82',
   onError: '#3A0A0E',
-  success: '#4CD98A',
-  warning: '#FFB84D',
+  success: '#B8D23A',
+  warning: '#D7DF23',
   card: '#181B24',
   border: '#272B38',
-  ripple: 'rgba(155, 163, 255, 0.16)',
+  ripple: 'rgba(91, 184, 224, 0.18)',
   overlay: 'rgba(0, 0, 0, 0.6)',
 };

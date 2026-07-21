@@ -1,5 +1,12 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { AppState, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
+import {
+  AppState,
+  Pressable,
+  ScrollView,
+  StyleSheet,
+  Text,
+  View,
+} from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
 import { useTheme } from '@theme';
 import { useAppDispatch, useAppSelector } from '@hooks';
@@ -15,19 +22,32 @@ import {
   requestForegroundLocation,
   requestNotifications,
 } from '@services';
-import { NOTIFICATION_SOUNDS, APP_NAME, APP_PRIVACY_NOTE, APP_TAGLINE, APP_VERSION, PERMISSION_STATE_LABELS } from '@constants';
-import { Card, Chip, Icon } from '@components';
+import {
+  NOTIFICATION_SOUNDS,
+  APP_NAME,
+  APP_PRIVACY_NOTE,
+  APP_TAGLINE,
+  APP_VERSION,
+  PERMISSION_STATE_LABELS,
+} from '@constants';
+import { Card, Chip, Icon, ScreenHeader, BrandLogo } from '@components';
 import type { MainTabScreenProps } from '@navigation/types';
 
 export const SettingsScreen: React.FC<MainTabScreenProps<'Settings'>> = () => {
   const theme = useTheme();
   const dispatch = useAppDispatch();
-  const themePreference = useAppSelector(state => state.settings.themePreference);
-  const notificationSound = useAppSelector(state => state.settings.notificationSound);
+  const themePreference = useAppSelector(
+    state => state.settings.themePreference,
+  );
+  const notificationSound = useAppSelector(
+    state => state.settings.notificationSound,
+  );
 
   const [locationState, setLocationState] = useState<PermissionState>('denied');
-  const [backgroundState, setBackgroundState] = useState<PermissionState>('denied');
-  const [notificationState, setNotificationState] = useState<PermissionState>('denied');
+  const [backgroundState, setBackgroundState] =
+    useState<PermissionState>('denied');
+  const [notificationState, setNotificationState] =
+    useState<PermissionState>('denied');
   const mounted = useRef(true);
 
   const refreshPermissions = useCallback(async () => {
@@ -97,129 +117,184 @@ export const SettingsScreen: React.FC<MainTabScreenProps<'Settings'>> = () => {
   };
 
   return (
-    <ScrollView
-      testID="settings-screen"
-      style={{ backgroundColor: theme.colors.background }}
-      contentContainerStyle={styles.content}>
-      <Text style={[theme.typography.headlineMedium, { color: theme.colors.onSurface }]}>
-        Settings
-      </Text>
-
-      <View style={styles.section}>
-        <Text style={[theme.typography.labelLarge, { color: theme.colors.onSurfaceVariant }]}>
-          Permissions
-        </Text>
-        <Card style={styles.cardList}>
-          <PermissionRow
-            icon="map-marker-outline"
-            label="Location"
-            state={locationState}
-            onGrant={grantLocation}
-          />
-          <PermissionRow
-            icon="map-marker-radius-outline"
-            label="Background location"
-            state={backgroundState}
-            onGrant={grantBackgroundLocation}
-          />
-          <PermissionRow
-            icon="bell-outline"
-            label="Notifications"
-            state={notificationState}
-            onGrant={grantNotifications}
-          />
+    <View
+      style={[styles.container, { backgroundColor: theme.colors.background }]}
+    >
+      <ScreenHeader title="Settings" subtitle={APP_TAGLINE} />
+      <ScrollView
+        testID="settings-screen"
+        contentContainerStyle={styles.content}
+      >
+        <View style={styles.section}>
           <Text
-            testID="settings-open-system"
-            onPress={openAppSettings}
-            style={[theme.typography.labelLarge, styles.settingsLink, { color: theme.colors.primary }]}>
-            Open system settings
+            style={[
+              theme.typography.labelLarge,
+              { color: theme.colors.onSurfaceVariant },
+            ]}
+          >
+            Permissions
           </Text>
-        </Card>
-      </View>
+          <Card style={styles.cardList}>
+            <PermissionRow
+              icon="map-marker-outline"
+              label="Location"
+              state={locationState}
+              onGrant={grantLocation}
+            />
+            <PermissionRow
+              icon="map-marker-radius-outline"
+              label="Background location"
+              state={backgroundState}
+              onGrant={grantBackgroundLocation}
+            />
+            <PermissionRow
+              icon="bell-outline"
+              label="Notifications"
+              state={notificationState}
+              onGrant={grantNotifications}
+            />
+            <Text
+              testID="settings-open-system"
+              onPress={openAppSettings}
+              style={[
+                theme.typography.labelLarge,
+                styles.settingsLink,
+                { color: theme.colors.primary },
+              ]}
+            >
+              Open system settings
+            </Text>
+          </Card>
+        </View>
 
-      <View style={styles.section}>
-        <Text style={[theme.typography.labelLarge, { color: theme.colors.onSurfaceVariant }]}>
-          Notifications
-        </Text>
-        <Card style={styles.cardList}>
-          <Text style={[theme.typography.bodyMedium, { color: theme.colors.onSurface }]}>
-            Tone for arrival reminders
+        <View style={styles.section}>
+          <Text
+            style={[
+              theme.typography.labelLarge,
+              { color: theme.colors.onSurfaceVariant },
+            ]}
+          >
+            Notifications
           </Text>
-          <View style={styles.chipRow}>
-            {NOTIFICATION_SOUNDS.map(sound => (
-              <Chip
-                key={sound.id}
-                testID={`settings-sound-${sound.id}`}
-                label={sound.label}
-                icon={notificationSound === sound.id ? 'volume-high' : 'music-note-outline'}
-                selected={notificationSound === sound.id}
-                onPress={() => {
-                  dispatch(setNotificationSound(sound.id));
-                  previewNotificationSound(sound.id);
-                }}
-              />
-            ))}
-          </View>
-          <Text style={[theme.typography.bodySmall, { color: theme.colors.onSurfaceVariant }]}>
-            Tapping a tone plays a preview. New reminders use this tone by default; each
-            reminder can still override it.
-          </Text>
-        </Card>
-      </View>
-
-      <View style={styles.section}>
-        <Text style={[theme.typography.labelLarge, { color: theme.colors.onSurfaceVariant }]}>
-          Appearance
-        </Text>
-        <Card>
-          <View style={styles.chipRow}>
-            <Chip
-              testID="settings-theme-system"
-              label="System"
-              icon="theme-light-dark"
-              selected={themePreference === 'system'}
-              onPress={() => dispatch(setThemePreference('system'))}
-            />
-            <Chip
-              testID="settings-theme-light"
-              label="Light"
-              icon="white-balance-sunny"
-              selected={themePreference === 'light'}
-              onPress={() => dispatch(setThemePreference('light'))}
-            />
-            <Chip
-              testID="settings-theme-dark"
-              label="Dark"
-              icon="weather-night"
-              selected={themePreference === 'dark'}
-              onPress={() => dispatch(setThemePreference('dark'))}
-            />
-          </View>
-        </Card>
-      </View>
-
-      <View style={styles.section}>
-        <Text style={[theme.typography.labelLarge, { color: theme.colors.onSurfaceVariant }]}>
-          About
-        </Text>
-        <Card style={styles.cardList}>
-          <View style={styles.aboutRow}>
-            <Icon name="map-marker-radius" size={22} color={theme.colors.primary} />
-            <View style={styles.aboutText}>
-              <Text style={[theme.typography.titleMedium, { color: theme.colors.onSurface }]}>
-                {APP_NAME}
-              </Text>
-              <Text style={[theme.typography.bodySmall, { color: theme.colors.onSurfaceVariant }]}>
-                {APP_TAGLINE} - v{APP_VERSION}
-              </Text>
+          <Card style={styles.cardList}>
+            <Text
+              style={[
+                theme.typography.bodyMedium,
+                { color: theme.colors.onSurface },
+              ]}
+            >
+              Tone for arrival reminders
+            </Text>
+            <View style={styles.chipRow}>
+              {NOTIFICATION_SOUNDS.map(sound => (
+                <Chip
+                  key={sound.id}
+                  testID={`settings-sound-${sound.id}`}
+                  label={sound.label}
+                  icon={
+                    notificationSound === sound.id
+                      ? 'volume-high'
+                      : 'music-note-outline'
+                  }
+                  selected={notificationSound === sound.id}
+                  onPress={() => {
+                    dispatch(setNotificationSound(sound.id));
+                    previewNotificationSound(sound.id);
+                  }}
+                />
+              ))}
             </View>
-          </View>
-          <Text style={[theme.typography.bodySmall, { color: theme.colors.onSurfaceVariant }]}>
-            {APP_PRIVACY_NOTE}
+            <Text
+              style={[
+                theme.typography.bodySmall,
+                { color: theme.colors.onSurfaceVariant },
+              ]}
+            >
+              Tapping a tone plays a preview. New reminders use this tone by
+              default; each reminder can still override it.
+            </Text>
+          </Card>
+        </View>
+
+        <View style={styles.section}>
+          <Text
+            style={[
+              theme.typography.labelLarge,
+              { color: theme.colors.onSurfaceVariant },
+            ]}
+          >
+            Appearance
           </Text>
-        </Card>
-      </View>
-    </ScrollView>
+          <Card>
+            <View style={styles.chipRow}>
+              <Chip
+                testID="settings-theme-system"
+                label="System"
+                icon="theme-light-dark"
+                selected={themePreference === 'system'}
+                onPress={() => dispatch(setThemePreference('system'))}
+              />
+              <Chip
+                testID="settings-theme-light"
+                label="Light"
+                icon="white-balance-sunny"
+                selected={themePreference === 'light'}
+                onPress={() => dispatch(setThemePreference('light'))}
+              />
+              <Chip
+                testID="settings-theme-dark"
+                label="Dark"
+                icon="weather-night"
+                selected={themePreference === 'dark'}
+                onPress={() => dispatch(setThemePreference('dark'))}
+              />
+            </View>
+          </Card>
+        </View>
+
+        <View style={styles.section}>
+          <Text
+            style={[
+              theme.typography.labelLarge,
+              { color: theme.colors.onSurfaceVariant },
+            ]}
+          >
+            About
+          </Text>
+          <Card style={styles.cardList}>
+            <View style={styles.aboutRow}>
+              <BrandLogo size={40} />
+              <View style={styles.aboutText}>
+                <Text
+                  style={[
+                    theme.typography.titleMedium,
+                    { color: theme.colors.onSurface },
+                  ]}
+                >
+                  {APP_NAME}
+                </Text>
+                <Text
+                  style={[
+                    theme.typography.bodySmall,
+                    { color: theme.colors.onSurfaceVariant },
+                  ]}
+                >
+                  {APP_TAGLINE} - v{APP_VERSION}
+                </Text>
+              </View>
+            </View>
+            <Text
+              style={[
+                theme.typography.bodySmall,
+                { color: theme.colors.onSurfaceVariant },
+              ]}
+            >
+              {APP_PRIVACY_NOTE}
+            </Text>
+          </Card>
+        </View>
+      </ScrollView>
+    </View>
   );
 };
 
@@ -235,11 +310,19 @@ const PermissionRow: React.FC<{
   return (
     <Pressable
       onPress={granted ? undefined : onGrant}
-      android_ripple={granted ? undefined : { color: theme.colors.ripple }}
-      style={styles.permissionRow}>
+      style={({ pressed }) => [
+        styles.permissionRow,
+        { opacity: !granted && pressed ? 0.82 : 1 },
+      ]}
+    >
       <Icon name={icon} size={20} color={theme.colors.onSurfaceVariant} />
       <Text
-        style={[theme.typography.bodyMedium, styles.permissionLabel, { color: theme.colors.onSurface }]}>
+        style={[
+          theme.typography.bodyMedium,
+          styles.permissionLabel,
+          { color: theme.colors.onSurface },
+        ]}
+      >
         {label}
       </Text>
       <View style={styles.permissionState}>
@@ -257,8 +340,12 @@ const PermissionRow: React.FC<{
 };
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
   content: {
     padding: 20,
+    paddingTop: 8,
     gap: 20,
     paddingBottom: 48,
   },

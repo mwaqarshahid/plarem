@@ -17,7 +17,7 @@ export const APP_TAGLINE = identity.tagline;
 export const APP_MOTTO = identity.motto;
 
 export const APP_PRIVACY_NOTE =
-  'Reminders are stored locally on this device. Location is only used on-device to trigger geofences; nothing is uploaded.';
+  'Reminders are stored locally on this device. Location is only used on-device to trigger geofences. Nothing is uploaded.';
 
 /**
  * Google Maps Platform API key for Places search and Geocoding HTTP calls.

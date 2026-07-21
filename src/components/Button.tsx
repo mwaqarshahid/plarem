@@ -1,5 +1,12 @@
 import React from 'react';
-import { ActivityIndicator, Pressable, StyleSheet, Text, View, ViewStyle } from 'react-native';
+import {
+  ActivityIndicator,
+  Pressable,
+  StyleSheet,
+  Text,
+  View,
+  ViewStyle,
+} from 'react-native';
 import { useTheme } from '@theme';
 import { Icon } from './Icon';
 
@@ -32,18 +39,18 @@ export const Button: React.FC<ButtonProps> = ({
     variant === 'primary'
       ? theme.colors.secondary
       : variant === 'danger'
-      ? theme.colors.error
-      : variant === 'secondary'
-      ? theme.colors.primary
-      : 'transparent';
+        ? theme.colors.error
+        : variant === 'secondary'
+          ? theme.colors.primary
+          : 'transparent';
   const foreground =
     variant === 'primary'
       ? theme.colors.onSecondary
       : variant === 'danger'
-      ? theme.colors.onError
-      : variant === 'secondary'
-      ? theme.colors.onPrimary
-      : theme.colors.primary;
+        ? theme.colors.onError
+        : variant === 'secondary'
+          ? theme.colors.onPrimary
+          : theme.colors.primary;
 
   return (
     <Pressable
@@ -51,22 +58,26 @@ export const Button: React.FC<ButtonProps> = ({
       accessibilityLabel={label}
       onPress={onPress}
       disabled={disabled || loading}
-      android_ripple={{ color: theme.colors.ripple }}
+      // No android_ripple — Material ripples ignore borderRadius on many OEMs
+      // (Samsung) and flash a rectangle. Opacity keeps the rounded shape.
       style={({ pressed }) => [
         styles.base,
         {
           backgroundColor: background,
           borderRadius: theme.radius.lg,
-          opacity: disabled ? 0.5 : pressed ? 0.85 : 1,
+          opacity: disabled ? 0.5 : pressed ? 0.82 : 1,
         },
         style,
-      ]}>
+      ]}
+    >
       {loading ? (
         <ActivityIndicator color={foreground} />
       ) : (
         <View style={styles.content}>
           {icon ? <Icon name={icon} size={20} color={foreground} /> : null}
-          <Text style={[theme.typography.labelLarge, { color: foreground }]}>{label}</Text>
+          <Text style={[theme.typography.labelLarge, { color: foreground }]}>
+            {label}
+          </Text>
         </View>
       )}
     </Pressable>
@@ -79,7 +90,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     paddingHorizontal: 20,
-    overflow: 'hidden',
   },
   content: {
     flexDirection: 'row',

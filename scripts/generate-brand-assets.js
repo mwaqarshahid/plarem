@@ -371,6 +371,14 @@ function syncToNativeProjects() {
 
   copyTree(path.join(EXPORT, 'ios', 'AppIcon.appiconset'), path.join(iosAssets, 'AppIcon.appiconset'));
 
+  // In-app brand mark (onboarding, etc.)
+  const jsBrand = path.join(ROOT, 'src', 'assets', 'brand');
+  ensureDir(jsBrand);
+  copyFile(path.join(EXPORT, 'logo', 'logo-icon.png'), path.join(jsBrand, 'logo-icon.png'));
+  copyFile(path.join(EXPORT, 'logo', 'logo-icon@2x.png'), path.join(jsBrand, 'logo-icon@2x.png'));
+  copyFile(path.join(EXPORT, 'logo', 'logo-white.png'), path.join(jsBrand, 'logo-white.png'));
+  copyFile(path.join(EXPORT, 'logo', 'logo-white@2x.png'), path.join(jsBrand, 'logo-white@2x.png'));
+
   const splashLight = path.join(EXPORT, 'splash', 'splash-light-phone.png');
   const splashDark = path.join(EXPORT, 'splash', 'splash-dark-phone.png');
   ensureDir(path.join(androidRes, 'drawable'));

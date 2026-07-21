@@ -1,5 +1,5 @@
 /**
- * Plarem brand mark — "Place Reminder"
+ * Plarem brand mark - "Place Reminder"
  * An alarm clock fused with a place pin: charcoal clock body with alarm bells,
  * a GPS navigation arrow at the center, and a lime pin-tail chevron.
  * Centered in a 128×128 canvas.

@@ -6,5 +6,7 @@ export * from './Button';
 export * from './Chip';
 export * from './Card';
 export * from './TextField';
+export * from './BrandLogo';
 export * from './EmptyState';
 export * from './ReminderCard';
+export * from './ScreenHeader';
