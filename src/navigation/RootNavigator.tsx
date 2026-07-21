@@ -8,7 +8,7 @@ import {
   NavigationContainer,
 } from '@react-navigation/native';
 import { useTheme } from '@theme';
-import { Icon } from '@components';
+import { BrandLogo, Icon } from '@components';
 import {
   HomeScreen,
   LocationPickerScreen,
@@ -27,10 +27,11 @@ export const navigationRef = createNavigationContainerRef<RootStackParamList>();
 interface TabIconProps {
   color: string;
   size: number;
+  focused: boolean;
 }
 
-const renderHomeIcon = ({ color, size }: TabIconProps) => (
-  <Icon name="map-marker-radius-outline" size={size} color={color} />
+const renderHomeIcon = ({ size, focused }: TabIconProps) => (
+  <BrandLogo size={size + 2} style={{ opacity: focused ? 1 : 0.45 }} />
 );
 
 const renderSettingsIcon = ({ color, size }: TabIconProps) => (

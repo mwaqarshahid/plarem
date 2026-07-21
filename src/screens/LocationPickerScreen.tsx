@@ -231,7 +231,7 @@ export const LocationPickerScreen: React.FC<RootStackScreenProps<'LocationPicker
               center={{ latitude: selection.latitude, longitude: selection.longitude }}
               radius={radius}
               strokeColor={theme.colors.primary}
-              fillColor={theme.dark ? 'rgba(155,163,255,0.18)' : 'rgba(79,91,232,0.15)'}
+              fillColor={theme.dark ? 'rgba(91,184,224,0.18)' : 'rgba(43,159,216,0.15)'}
               strokeWidth={2}
             />
           </>

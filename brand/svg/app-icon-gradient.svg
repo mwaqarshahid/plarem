@@ -1,23 +1,304 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024">
   <defs>
-  <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
-    <stop offset="0%" stop-color="#4F5BE8"/>
-    <stop offset="55%" stop-color="#5B66EA"/>
-    <stop offset="100%" stop-color="#00A98F"/>
+  <linearGradient id="bg" x1="0%" y1="0%" x2="0%" y2="100%">
+    <stop offset="0%" stop-color="#A2A4A7"/>
+    <stop offset="100%" stop-color="#4B4D52"/>
   </linearGradient>
-  <radialGradient id="glow" cx="50%" cy="42%" r="50%">
-    <stop offset="0%" stop-color="rgba(255,255,255,0.18)"/>
+  <radialGradient id="glow" cx="50%" cy="30%" r="60%">
+    <stop offset="0%" stop-color="rgba(255,255,255,0.16)"/>
     <stop offset="100%" stop-color="rgba(255,255,255,0)"/>
   </radialGradient>
+  <clipPath id="tile"><rect width="1024" height="1024" /></clipPath>
 </defs>
 <rect width="1024" height="1024"  fill="url(#bg)"/>
 <rect width="1024" height="1024"  fill="url(#glow)"/>
-  <g transform="translate(512, 512) scale(4) translate(-64, -64)">
-    <g transform="translate(0, 7)"><path d="M 30 54 A 34 34 0 1 1 98 54" fill="none" stroke="#B8FFF0" stroke-width="2" stroke-linecap="round" opacity="0.22"/>
-  <path d="M 34 54 A 30 30 0 1 1 94 54" fill="none" stroke="#B8FFF0" stroke-width="4.5" stroke-linecap="round" opacity="0.9"/>
-  <path d="M 39 54 A 25 25 0 1 1 89 54" fill="none" stroke="rgba(255,255,255,0.35)" stroke-width="2" stroke-linecap="round" opacity="0.35"/>
-  <path d="M64 24 C49.5 24 39 35 39 48.5 C39 55.5 48.5 67 64 91 C79.5 67 89 55.5 89 48.5 C89 35 78.5 24 64 24 Z" fill="#FFFFFF"/>
-  <circle cx="64" cy="47" r="11.5" fill="#4F5BE8" opacity="0.96"/>
-  <circle cx="64" cy="47" r="5" fill="#B8FFF0"/></g>
+<g opacity="0.14" clip-path="url(#tile)">
+<g transform="translate(526, 526) scale(7.4) translate(-64, -60)"><path d="M 25.4 43.6 A 40 40 0 0 1 47.1 17.7" fill="none" stroke="#000000" stroke-width="7" stroke-linecap="round"/>
+  <path d="M 80.9 17.7 A 40 40 0 0 1 102.6 43.6" fill="none" stroke="#000000" stroke-width="7" stroke-linecap="round"/>
+  <path d="M 40 68 L 88 68 L 64 106 Z" fill="#000000"/>
+  <circle cx="64" cy="54" r="30" fill="#000000"/></g>
+<g transform="translate(540, 540) scale(7.4) translate(-64, -60)"><path d="M 25.4 43.6 A 40 40 0 0 1 47.1 17.7" fill="none" stroke="#000000" stroke-width="7" stroke-linecap="round"/>
+  <path d="M 80.9 17.7 A 40 40 0 0 1 102.6 43.6" fill="none" stroke="#000000" stroke-width="7" stroke-linecap="round"/>
+  <path d="M 40 68 L 88 68 L 64 106 Z" fill="#000000"/>
+  <circle cx="64" cy="54" r="30" fill="#000000"/></g>
+<g transform="translate(554, 554) scale(7.4) translate(-64, -60)"><path d="M 25.4 43.6 A 40 40 0 0 1 47.1 17.7" fill="none" stroke="#000000" stroke-width="7" stroke-linecap="round"/>
+  <path d="M 80.9 17.7 A 40 40 0 0 1 102.6 43.6" fill="none" stroke="#000000" stroke-width="7" stroke-linecap="round"/>
+  <path d="M 40 68 L 88 68 L 64 106 Z" fill="#000000"/>
+  <circle cx="64" cy="54" r="30" fill="#000000"/></g>
+<g transform="translate(568, 568) scale(7.4) translate(-64, -60)"><path d="M 25.4 43.6 A 40 40 0 0 1 47.1 17.7" fill="none" stroke="#000000" stroke-width="7" stroke-linecap="round"/>
+  <path d="M 80.9 17.7 A 40 40 0 0 1 102.6 43.6" fill="none" stroke="#000000" stroke-width="7" stroke-linecap="round"/>
+  <path d="M 40 68 L 88 68 L 64 106 Z" fill="#000000"/>
+  <circle cx="64" cy="54" r="30" fill="#000000"/></g>
+<g transform="translate(582, 582) scale(7.4) translate(-64, -60)"><path d="M 25.4 43.6 A 40 40 0 0 1 47.1 17.7" fill="none" stroke="#000000" stroke-width="7" stroke-linecap="round"/>
+  <path d="M 80.9 17.7 A 40 40 0 0 1 102.6 43.6" fill="none" stroke="#000000" stroke-width="7" stroke-linecap="round"/>
+  <path d="M 40 68 L 88 68 L 64 106 Z" fill="#000000"/>
+  <circle cx="64" cy="54" r="30" fill="#000000"/></g>
+<g transform="translate(596, 596) scale(7.4) translate(-64, -60)"><path d="M 25.4 43.6 A 40 40 0 0 1 47.1 17.7" fill="none" stroke="#000000" stroke-width="7" stroke-linecap="round"/>
+  <path d="M 80.9 17.7 A 40 40 0 0 1 102.6 43.6" fill="none" stroke="#000000" stroke-width="7" stroke-linecap="round"/>
+  <path d="M 40 68 L 88 68 L 64 106 Z" fill="#000000"/>
+  <circle cx="64" cy="54" r="30" fill="#000000"/></g>
+<g transform="translate(610, 610) scale(7.4) translate(-64, -60)"><path d="M 25.4 43.6 A 40 40 0 0 1 47.1 17.7" fill="none" stroke="#000000" stroke-width="7" stroke-linecap="round"/>
+  <path d="M 80.9 17.7 A 40 40 0 0 1 102.6 43.6" fill="none" stroke="#000000" stroke-width="7" stroke-linecap="round"/>
+  <path d="M 40 68 L 88 68 L 64 106 Z" fill="#000000"/>
+  <circle cx="64" cy="54" r="30" fill="#000000"/></g>
+<g transform="translate(624, 624) scale(7.4) translate(-64, -60)"><path d="M 25.4 43.6 A 40 40 0 0 1 47.1 17.7" fill="none" stroke="#000000" stroke-width="7" stroke-linecap="round"/>
+  <path d="M 80.9 17.7 A 40 40 0 0 1 102.6 43.6" fill="none" stroke="#000000" stroke-width="7" stroke-linecap="round"/>
+  <path d="M 40 68 L 88 68 L 64 106 Z" fill="#000000"/>
+  <circle cx="64" cy="54" r="30" fill="#000000"/></g>
+<g transform="translate(638, 638) scale(7.4) translate(-64, -60)"><path d="M 25.4 43.6 A 40 40 0 0 1 47.1 17.7" fill="none" stroke="#000000" stroke-width="7" stroke-linecap="round"/>
+  <path d="M 80.9 17.7 A 40 40 0 0 1 102.6 43.6" fill="none" stroke="#000000" stroke-width="7" stroke-linecap="round"/>
+  <path d="M 40 68 L 88 68 L 64 106 Z" fill="#000000"/>
+  <circle cx="64" cy="54" r="30" fill="#000000"/></g>
+<g transform="translate(652, 652) scale(7.4) translate(-64, -60)"><path d="M 25.4 43.6 A 40 40 0 0 1 47.1 17.7" fill="none" stroke="#000000" stroke-width="7" stroke-linecap="round"/>
+  <path d="M 80.9 17.7 A 40 40 0 0 1 102.6 43.6" fill="none" stroke="#000000" stroke-width="7" stroke-linecap="round"/>
+  <path d="M 40 68 L 88 68 L 64 106 Z" fill="#000000"/>
+  <circle cx="64" cy="54" r="30" fill="#000000"/></g>
+<g transform="translate(666, 666) scale(7.4) translate(-64, -60)"><path d="M 25.4 43.6 A 40 40 0 0 1 47.1 17.7" fill="none" stroke="#000000" stroke-width="7" stroke-linecap="round"/>
+  <path d="M 80.9 17.7 A 40 40 0 0 1 102.6 43.6" fill="none" stroke="#000000" stroke-width="7" stroke-linecap="round"/>
+  <path d="M 40 68 L 88 68 L 64 106 Z" fill="#000000"/>
+  <circle cx="64" cy="54" r="30" fill="#000000"/></g>
+<g transform="translate(680, 680) scale(7.4) translate(-64, -60)"><path d="M 25.4 43.6 A 40 40 0 0 1 47.1 17.7" fill="none" stroke="#000000" stroke-width="7" stroke-linecap="round"/>
+  <path d="M 80.9 17.7 A 40 40 0 0 1 102.6 43.6" fill="none" stroke="#000000" stroke-width="7" stroke-linecap="round"/>
+  <path d="M 40 68 L 88 68 L 64 106 Z" fill="#000000"/>
+  <circle cx="64" cy="54" r="30" fill="#000000"/></g>
+<g transform="translate(694, 694) scale(7.4) translate(-64, -60)"><path d="M 25.4 43.6 A 40 40 0 0 1 47.1 17.7" fill="none" stroke="#000000" stroke-width="7" stroke-linecap="round"/>
+  <path d="M 80.9 17.7 A 40 40 0 0 1 102.6 43.6" fill="none" stroke="#000000" stroke-width="7" stroke-linecap="round"/>
+  <path d="M 40 68 L 88 68 L 64 106 Z" fill="#000000"/>
+  <circle cx="64" cy="54" r="30" fill="#000000"/></g>
+<g transform="translate(708, 708) scale(7.4) translate(-64, -60)"><path d="M 25.4 43.6 A 40 40 0 0 1 47.1 17.7" fill="none" stroke="#000000" stroke-width="7" stroke-linecap="round"/>
+  <path d="M 80.9 17.7 A 40 40 0 0 1 102.6 43.6" fill="none" stroke="#000000" stroke-width="7" stroke-linecap="round"/>
+  <path d="M 40 68 L 88 68 L 64 106 Z" fill="#000000"/>
+  <circle cx="64" cy="54" r="30" fill="#000000"/></g>
+<g transform="translate(722, 722) scale(7.4) translate(-64, -60)"><path d="M 25.4 43.6 A 40 40 0 0 1 47.1 17.7" fill="none" stroke="#000000" stroke-width="7" stroke-linecap="round"/>
+  <path d="M 80.9 17.7 A 40 40 0 0 1 102.6 43.6" fill="none" stroke="#000000" stroke-width="7" stroke-linecap="round"/>
+  <path d="M 40 68 L 88 68 L 64 106 Z" fill="#000000"/>
+  <circle cx="64" cy="54" r="30" fill="#000000"/></g>
+<g transform="translate(736, 736) scale(7.4) translate(-64, -60)"><path d="M 25.4 43.6 A 40 40 0 0 1 47.1 17.7" fill="none" stroke="#000000" stroke-width="7" stroke-linecap="round"/>
+  <path d="M 80.9 17.7 A 40 40 0 0 1 102.6 43.6" fill="none" stroke="#000000" stroke-width="7" stroke-linecap="round"/>
+  <path d="M 40 68 L 88 68 L 64 106 Z" fill="#000000"/>
+  <circle cx="64" cy="54" r="30" fill="#000000"/></g>
+<g transform="translate(750, 750) scale(7.4) translate(-64, -60)"><path d="M 25.4 43.6 A 40 40 0 0 1 47.1 17.7" fill="none" stroke="#000000" stroke-width="7" stroke-linecap="round"/>
+  <path d="M 80.9 17.7 A 40 40 0 0 1 102.6 43.6" fill="none" stroke="#000000" stroke-width="7" stroke-linecap="round"/>
+  <path d="M 40 68 L 88 68 L 64 106 Z" fill="#000000"/>
+  <circle cx="64" cy="54" r="30" fill="#000000"/></g>
+<g transform="translate(764, 764) scale(7.4) translate(-64, -60)"><path d="M 25.4 43.6 A 40 40 0 0 1 47.1 17.7" fill="none" stroke="#000000" stroke-width="7" stroke-linecap="round"/>
+  <path d="M 80.9 17.7 A 40 40 0 0 1 102.6 43.6" fill="none" stroke="#000000" stroke-width="7" stroke-linecap="round"/>
+  <path d="M 40 68 L 88 68 L 64 106 Z" fill="#000000"/>
+  <circle cx="64" cy="54" r="30" fill="#000000"/></g>
+<g transform="translate(778, 778) scale(7.4) translate(-64, -60)"><path d="M 25.4 43.6 A 40 40 0 0 1 47.1 17.7" fill="none" stroke="#000000" stroke-width="7" stroke-linecap="round"/>
+  <path d="M 80.9 17.7 A 40 40 0 0 1 102.6 43.6" fill="none" stroke="#000000" stroke-width="7" stroke-linecap="round"/>
+  <path d="M 40 68 L 88 68 L 64 106 Z" fill="#000000"/>
+  <circle cx="64" cy="54" r="30" fill="#000000"/></g>
+<g transform="translate(792, 792) scale(7.4) translate(-64, -60)"><path d="M 25.4 43.6 A 40 40 0 0 1 47.1 17.7" fill="none" stroke="#000000" stroke-width="7" stroke-linecap="round"/>
+  <path d="M 80.9 17.7 A 40 40 0 0 1 102.6 43.6" fill="none" stroke="#000000" stroke-width="7" stroke-linecap="round"/>
+  <path d="M 40 68 L 88 68 L 64 106 Z" fill="#000000"/>
+  <circle cx="64" cy="54" r="30" fill="#000000"/></g>
+<g transform="translate(806, 806) scale(7.4) translate(-64, -60)"><path d="M 25.4 43.6 A 40 40 0 0 1 47.1 17.7" fill="none" stroke="#000000" stroke-width="7" stroke-linecap="round"/>
+  <path d="M 80.9 17.7 A 40 40 0 0 1 102.6 43.6" fill="none" stroke="#000000" stroke-width="7" stroke-linecap="round"/>
+  <path d="M 40 68 L 88 68 L 64 106 Z" fill="#000000"/>
+  <circle cx="64" cy="54" r="30" fill="#000000"/></g>
+<g transform="translate(820, 820) scale(7.4) translate(-64, -60)"><path d="M 25.4 43.6 A 40 40 0 0 1 47.1 17.7" fill="none" stroke="#000000" stroke-width="7" stroke-linecap="round"/>
+  <path d="M 80.9 17.7 A 40 40 0 0 1 102.6 43.6" fill="none" stroke="#000000" stroke-width="7" stroke-linecap="round"/>
+  <path d="M 40 68 L 88 68 L 64 106 Z" fill="#000000"/>
+  <circle cx="64" cy="54" r="30" fill="#000000"/></g>
+<g transform="translate(834, 834) scale(7.4) translate(-64, -60)"><path d="M 25.4 43.6 A 40 40 0 0 1 47.1 17.7" fill="none" stroke="#000000" stroke-width="7" stroke-linecap="round"/>
+  <path d="M 80.9 17.7 A 40 40 0 0 1 102.6 43.6" fill="none" stroke="#000000" stroke-width="7" stroke-linecap="round"/>
+  <path d="M 40 68 L 88 68 L 64 106 Z" fill="#000000"/>
+  <circle cx="64" cy="54" r="30" fill="#000000"/></g>
+<g transform="translate(848, 848) scale(7.4) translate(-64, -60)"><path d="M 25.4 43.6 A 40 40 0 0 1 47.1 17.7" fill="none" stroke="#000000" stroke-width="7" stroke-linecap="round"/>
+  <path d="M 80.9 17.7 A 40 40 0 0 1 102.6 43.6" fill="none" stroke="#000000" stroke-width="7" stroke-linecap="round"/>
+  <path d="M 40 68 L 88 68 L 64 106 Z" fill="#000000"/>
+  <circle cx="64" cy="54" r="30" fill="#000000"/></g>
+<g transform="translate(862, 862) scale(7.4) translate(-64, -60)"><path d="M 25.4 43.6 A 40 40 0 0 1 47.1 17.7" fill="none" stroke="#000000" stroke-width="7" stroke-linecap="round"/>
+  <path d="M 80.9 17.7 A 40 40 0 0 1 102.6 43.6" fill="none" stroke="#000000" stroke-width="7" stroke-linecap="round"/>
+  <path d="M 40 68 L 88 68 L 64 106 Z" fill="#000000"/>
+  <circle cx="64" cy="54" r="30" fill="#000000"/></g>
+<g transform="translate(876, 876) scale(7.4) translate(-64, -60)"><path d="M 25.4 43.6 A 40 40 0 0 1 47.1 17.7" fill="none" stroke="#000000" stroke-width="7" stroke-linecap="round"/>
+  <path d="M 80.9 17.7 A 40 40 0 0 1 102.6 43.6" fill="none" stroke="#000000" stroke-width="7" stroke-linecap="round"/>
+  <path d="M 40 68 L 88 68 L 64 106 Z" fill="#000000"/>
+  <circle cx="64" cy="54" r="30" fill="#000000"/></g>
+<g transform="translate(890, 890) scale(7.4) translate(-64, -60)"><path d="M 25.4 43.6 A 40 40 0 0 1 47.1 17.7" fill="none" stroke="#000000" stroke-width="7" stroke-linecap="round"/>
+  <path d="M 80.9 17.7 A 40 40 0 0 1 102.6 43.6" fill="none" stroke="#000000" stroke-width="7" stroke-linecap="round"/>
+  <path d="M 40 68 L 88 68 L 64 106 Z" fill="#000000"/>
+  <circle cx="64" cy="54" r="30" fill="#000000"/></g>
+<g transform="translate(904, 904) scale(7.4) translate(-64, -60)"><path d="M 25.4 43.6 A 40 40 0 0 1 47.1 17.7" fill="none" stroke="#000000" stroke-width="7" stroke-linecap="round"/>
+  <path d="M 80.9 17.7 A 40 40 0 0 1 102.6 43.6" fill="none" stroke="#000000" stroke-width="7" stroke-linecap="round"/>
+  <path d="M 40 68 L 88 68 L 64 106 Z" fill="#000000"/>
+  <circle cx="64" cy="54" r="30" fill="#000000"/></g>
+<g transform="translate(918, 918) scale(7.4) translate(-64, -60)"><path d="M 25.4 43.6 A 40 40 0 0 1 47.1 17.7" fill="none" stroke="#000000" stroke-width="7" stroke-linecap="round"/>
+  <path d="M 80.9 17.7 A 40 40 0 0 1 102.6 43.6" fill="none" stroke="#000000" stroke-width="7" stroke-linecap="round"/>
+  <path d="M 40 68 L 88 68 L 64 106 Z" fill="#000000"/>
+  <circle cx="64" cy="54" r="30" fill="#000000"/></g>
+<g transform="translate(932, 932) scale(7.4) translate(-64, -60)"><path d="M 25.4 43.6 A 40 40 0 0 1 47.1 17.7" fill="none" stroke="#000000" stroke-width="7" stroke-linecap="round"/>
+  <path d="M 80.9 17.7 A 40 40 0 0 1 102.6 43.6" fill="none" stroke="#000000" stroke-width="7" stroke-linecap="round"/>
+  <path d="M 40 68 L 88 68 L 64 106 Z" fill="#000000"/>
+  <circle cx="64" cy="54" r="30" fill="#000000"/></g>
+<g transform="translate(946, 946) scale(7.4) translate(-64, -60)"><path d="M 25.4 43.6 A 40 40 0 0 1 47.1 17.7" fill="none" stroke="#000000" stroke-width="7" stroke-linecap="round"/>
+  <path d="M 80.9 17.7 A 40 40 0 0 1 102.6 43.6" fill="none" stroke="#000000" stroke-width="7" stroke-linecap="round"/>
+  <path d="M 40 68 L 88 68 L 64 106 Z" fill="#000000"/>
+  <circle cx="64" cy="54" r="30" fill="#000000"/></g>
+<g transform="translate(960, 960) scale(7.4) translate(-64, -60)"><path d="M 25.4 43.6 A 40 40 0 0 1 47.1 17.7" fill="none" stroke="#000000" stroke-width="7" stroke-linecap="round"/>
+  <path d="M 80.9 17.7 A 40 40 0 0 1 102.6 43.6" fill="none" stroke="#000000" stroke-width="7" stroke-linecap="round"/>
+  <path d="M 40 68 L 88 68 L 64 106 Z" fill="#000000"/>
+  <circle cx="64" cy="54" r="30" fill="#000000"/></g>
+<g transform="translate(974, 974) scale(7.4) translate(-64, -60)"><path d="M 25.4 43.6 A 40 40 0 0 1 47.1 17.7" fill="none" stroke="#000000" stroke-width="7" stroke-linecap="round"/>
+  <path d="M 80.9 17.7 A 40 40 0 0 1 102.6 43.6" fill="none" stroke="#000000" stroke-width="7" stroke-linecap="round"/>
+  <path d="M 40 68 L 88 68 L 64 106 Z" fill="#000000"/>
+  <circle cx="64" cy="54" r="30" fill="#000000"/></g>
+<g transform="translate(988, 988) scale(7.4) translate(-64, -60)"><path d="M 25.4 43.6 A 40 40 0 0 1 47.1 17.7" fill="none" stroke="#000000" stroke-width="7" stroke-linecap="round"/>
+  <path d="M 80.9 17.7 A 40 40 0 0 1 102.6 43.6" fill="none" stroke="#000000" stroke-width="7" stroke-linecap="round"/>
+  <path d="M 40 68 L 88 68 L 64 106 Z" fill="#000000"/>
+  <circle cx="64" cy="54" r="30" fill="#000000"/></g>
+<g transform="translate(1002, 1002) scale(7.4) translate(-64, -60)"><path d="M 25.4 43.6 A 40 40 0 0 1 47.1 17.7" fill="none" stroke="#000000" stroke-width="7" stroke-linecap="round"/>
+  <path d="M 80.9 17.7 A 40 40 0 0 1 102.6 43.6" fill="none" stroke="#000000" stroke-width="7" stroke-linecap="round"/>
+  <path d="M 40 68 L 88 68 L 64 106 Z" fill="#000000"/>
+  <circle cx="64" cy="54" r="30" fill="#000000"/></g>
+<g transform="translate(1016, 1016) scale(7.4) translate(-64, -60)"><path d="M 25.4 43.6 A 40 40 0 0 1 47.1 17.7" fill="none" stroke="#000000" stroke-width="7" stroke-linecap="round"/>
+  <path d="M 80.9 17.7 A 40 40 0 0 1 102.6 43.6" fill="none" stroke="#000000" stroke-width="7" stroke-linecap="round"/>
+  <path d="M 40 68 L 88 68 L 64 106 Z" fill="#000000"/>
+  <circle cx="64" cy="54" r="30" fill="#000000"/></g>
+<g transform="translate(1030, 1030) scale(7.4) translate(-64, -60)"><path d="M 25.4 43.6 A 40 40 0 0 1 47.1 17.7" fill="none" stroke="#000000" stroke-width="7" stroke-linecap="round"/>
+  <path d="M 80.9 17.7 A 40 40 0 0 1 102.6 43.6" fill="none" stroke="#000000" stroke-width="7" stroke-linecap="round"/>
+  <path d="M 40 68 L 88 68 L 64 106 Z" fill="#000000"/>
+  <circle cx="64" cy="54" r="30" fill="#000000"/></g>
+<g transform="translate(1044, 1044) scale(7.4) translate(-64, -60)"><path d="M 25.4 43.6 A 40 40 0 0 1 47.1 17.7" fill="none" stroke="#000000" stroke-width="7" stroke-linecap="round"/>
+  <path d="M 80.9 17.7 A 40 40 0 0 1 102.6 43.6" fill="none" stroke="#000000" stroke-width="7" stroke-linecap="round"/>
+  <path d="M 40 68 L 88 68 L 64 106 Z" fill="#000000"/>
+  <circle cx="64" cy="54" r="30" fill="#000000"/></g>
+<g transform="translate(1058, 1058) scale(7.4) translate(-64, -60)"><path d="M 25.4 43.6 A 40 40 0 0 1 47.1 17.7" fill="none" stroke="#000000" stroke-width="7" stroke-linecap="round"/>
+  <path d="M 80.9 17.7 A 40 40 0 0 1 102.6 43.6" fill="none" stroke="#000000" stroke-width="7" stroke-linecap="round"/>
+  <path d="M 40 68 L 88 68 L 64 106 Z" fill="#000000"/>
+  <circle cx="64" cy="54" r="30" fill="#000000"/></g>
+<g transform="translate(1072, 1072) scale(7.4) translate(-64, -60)"><path d="M 25.4 43.6 A 40 40 0 0 1 47.1 17.7" fill="none" stroke="#000000" stroke-width="7" stroke-linecap="round"/>
+  <path d="M 80.9 17.7 A 40 40 0 0 1 102.6 43.6" fill="none" stroke="#000000" stroke-width="7" stroke-linecap="round"/>
+  <path d="M 40 68 L 88 68 L 64 106 Z" fill="#000000"/>
+  <circle cx="64" cy="54" r="30" fill="#000000"/></g>
+<g transform="translate(1086, 1086) scale(7.4) translate(-64, -60)"><path d="M 25.4 43.6 A 40 40 0 0 1 47.1 17.7" fill="none" stroke="#000000" stroke-width="7" stroke-linecap="round"/>
+  <path d="M 80.9 17.7 A 40 40 0 0 1 102.6 43.6" fill="none" stroke="#000000" stroke-width="7" stroke-linecap="round"/>
+  <path d="M 40 68 L 88 68 L 64 106 Z" fill="#000000"/>
+  <circle cx="64" cy="54" r="30" fill="#000000"/></g>
+<g transform="translate(1100, 1100) scale(7.4) translate(-64, -60)"><path d="M 25.4 43.6 A 40 40 0 0 1 47.1 17.7" fill="none" stroke="#000000" stroke-width="7" stroke-linecap="round"/>
+  <path d="M 80.9 17.7 A 40 40 0 0 1 102.6 43.6" fill="none" stroke="#000000" stroke-width="7" stroke-linecap="round"/>
+  <path d="M 40 68 L 88 68 L 64 106 Z" fill="#000000"/>
+  <circle cx="64" cy="54" r="30" fill="#000000"/></g>
+<g transform="translate(1114, 1114) scale(7.4) translate(-64, -60)"><path d="M 25.4 43.6 A 40 40 0 0 1 47.1 17.7" fill="none" stroke="#000000" stroke-width="7" stroke-linecap="round"/>
+  <path d="M 80.9 17.7 A 40 40 0 0 1 102.6 43.6" fill="none" stroke="#000000" stroke-width="7" stroke-linecap="round"/>
+  <path d="M 40 68 L 88 68 L 64 106 Z" fill="#000000"/>
+  <circle cx="64" cy="54" r="30" fill="#000000"/></g>
+<g transform="translate(1128, 1128) scale(7.4) translate(-64, -60)"><path d="M 25.4 43.6 A 40 40 0 0 1 47.1 17.7" fill="none" stroke="#000000" stroke-width="7" stroke-linecap="round"/>
+  <path d="M 80.9 17.7 A 40 40 0 0 1 102.6 43.6" fill="none" stroke="#000000" stroke-width="7" stroke-linecap="round"/>
+  <path d="M 40 68 L 88 68 L 64 106 Z" fill="#000000"/>
+  <circle cx="64" cy="54" r="30" fill="#000000"/></g>
+<g transform="translate(1142, 1142) scale(7.4) translate(-64, -60)"><path d="M 25.4 43.6 A 40 40 0 0 1 47.1 17.7" fill="none" stroke="#000000" stroke-width="7" stroke-linecap="round"/>
+  <path d="M 80.9 17.7 A 40 40 0 0 1 102.6 43.6" fill="none" stroke="#000000" stroke-width="7" stroke-linecap="round"/>
+  <path d="M 40 68 L 88 68 L 64 106 Z" fill="#000000"/>
+  <circle cx="64" cy="54" r="30" fill="#000000"/></g>
+<g transform="translate(1156, 1156) scale(7.4) translate(-64, -60)"><path d="M 25.4 43.6 A 40 40 0 0 1 47.1 17.7" fill="none" stroke="#000000" stroke-width="7" stroke-linecap="round"/>
+  <path d="M 80.9 17.7 A 40 40 0 0 1 102.6 43.6" fill="none" stroke="#000000" stroke-width="7" stroke-linecap="round"/>
+  <path d="M 40 68 L 88 68 L 64 106 Z" fill="#000000"/>
+  <circle cx="64" cy="54" r="30" fill="#000000"/></g>
+<g transform="translate(1170, 1170) scale(7.4) translate(-64, -60)"><path d="M 25.4 43.6 A 40 40 0 0 1 47.1 17.7" fill="none" stroke="#000000" stroke-width="7" stroke-linecap="round"/>
+  <path d="M 80.9 17.7 A 40 40 0 0 1 102.6 43.6" fill="none" stroke="#000000" stroke-width="7" stroke-linecap="round"/>
+  <path d="M 40 68 L 88 68 L 64 106 Z" fill="#000000"/>
+  <circle cx="64" cy="54" r="30" fill="#000000"/></g>
+<g transform="translate(1184, 1184) scale(7.4) translate(-64, -60)"><path d="M 25.4 43.6 A 40 40 0 0 1 47.1 17.7" fill="none" stroke="#000000" stroke-width="7" stroke-linecap="round"/>
+  <path d="M 80.9 17.7 A 40 40 0 0 1 102.6 43.6" fill="none" stroke="#000000" stroke-width="7" stroke-linecap="round"/>
+  <path d="M 40 68 L 88 68 L 64 106 Z" fill="#000000"/>
+  <circle cx="64" cy="54" r="30" fill="#000000"/></g>
+<g transform="translate(1198, 1198) scale(7.4) translate(-64, -60)"><path d="M 25.4 43.6 A 40 40 0 0 1 47.1 17.7" fill="none" stroke="#000000" stroke-width="7" stroke-linecap="round"/>
+  <path d="M 80.9 17.7 A 40 40 0 0 1 102.6 43.6" fill="none" stroke="#000000" stroke-width="7" stroke-linecap="round"/>
+  <path d="M 40 68 L 88 68 L 64 106 Z" fill="#000000"/>
+  <circle cx="64" cy="54" r="30" fill="#000000"/></g>
+<g transform="translate(1212, 1212) scale(7.4) translate(-64, -60)"><path d="M 25.4 43.6 A 40 40 0 0 1 47.1 17.7" fill="none" stroke="#000000" stroke-width="7" stroke-linecap="round"/>
+  <path d="M 80.9 17.7 A 40 40 0 0 1 102.6 43.6" fill="none" stroke="#000000" stroke-width="7" stroke-linecap="round"/>
+  <path d="M 40 68 L 88 68 L 64 106 Z" fill="#000000"/>
+  <circle cx="64" cy="54" r="30" fill="#000000"/></g>
+<g transform="translate(1226, 1226) scale(7.4) translate(-64, -60)"><path d="M 25.4 43.6 A 40 40 0 0 1 47.1 17.7" fill="none" stroke="#000000" stroke-width="7" stroke-linecap="round"/>
+  <path d="M 80.9 17.7 A 40 40 0 0 1 102.6 43.6" fill="none" stroke="#000000" stroke-width="7" stroke-linecap="round"/>
+  <path d="M 40 68 L 88 68 L 64 106 Z" fill="#000000"/>
+  <circle cx="64" cy="54" r="30" fill="#000000"/></g>
+<g transform="translate(1240, 1240) scale(7.4) translate(-64, -60)"><path d="M 25.4 43.6 A 40 40 0 0 1 47.1 17.7" fill="none" stroke="#000000" stroke-width="7" stroke-linecap="round"/>
+  <path d="M 80.9 17.7 A 40 40 0 0 1 102.6 43.6" fill="none" stroke="#000000" stroke-width="7" stroke-linecap="round"/>
+  <path d="M 40 68 L 88 68 L 64 106 Z" fill="#000000"/>
+  <circle cx="64" cy="54" r="30" fill="#000000"/></g>
+<g transform="translate(1254, 1254) scale(7.4) translate(-64, -60)"><path d="M 25.4 43.6 A 40 40 0 0 1 47.1 17.7" fill="none" stroke="#000000" stroke-width="7" stroke-linecap="round"/>
+  <path d="M 80.9 17.7 A 40 40 0 0 1 102.6 43.6" fill="none" stroke="#000000" stroke-width="7" stroke-linecap="round"/>
+  <path d="M 40 68 L 88 68 L 64 106 Z" fill="#000000"/>
+  <circle cx="64" cy="54" r="30" fill="#000000"/></g>
+<g transform="translate(1268, 1268) scale(7.4) translate(-64, -60)"><path d="M 25.4 43.6 A 40 40 0 0 1 47.1 17.7" fill="none" stroke="#000000" stroke-width="7" stroke-linecap="round"/>
+  <path d="M 80.9 17.7 A 40 40 0 0 1 102.6 43.6" fill="none" stroke="#000000" stroke-width="7" stroke-linecap="round"/>
+  <path d="M 40 68 L 88 68 L 64 106 Z" fill="#000000"/>
+  <circle cx="64" cy="54" r="30" fill="#000000"/></g>
+<g transform="translate(1282, 1282) scale(7.4) translate(-64, -60)"><path d="M 25.4 43.6 A 40 40 0 0 1 47.1 17.7" fill="none" stroke="#000000" stroke-width="7" stroke-linecap="round"/>
+  <path d="M 80.9 17.7 A 40 40 0 0 1 102.6 43.6" fill="none" stroke="#000000" stroke-width="7" stroke-linecap="round"/>
+  <path d="M 40 68 L 88 68 L 64 106 Z" fill="#000000"/>
+  <circle cx="64" cy="54" r="30" fill="#000000"/></g>
+<g transform="translate(1296, 1296) scale(7.4) translate(-64, -60)"><path d="M 25.4 43.6 A 40 40 0 0 1 47.1 17.7" fill="none" stroke="#000000" stroke-width="7" stroke-linecap="round"/>
+  <path d="M 80.9 17.7 A 40 40 0 0 1 102.6 43.6" fill="none" stroke="#000000" stroke-width="7" stroke-linecap="round"/>
+  <path d="M 40 68 L 88 68 L 64 106 Z" fill="#000000"/>
+  <circle cx="64" cy="54" r="30" fill="#000000"/></g>
+<g transform="translate(1310, 1310) scale(7.4) translate(-64, -60)"><path d="M 25.4 43.6 A 40 40 0 0 1 47.1 17.7" fill="none" stroke="#000000" stroke-width="7" stroke-linecap="round"/>
+  <path d="M 80.9 17.7 A 40 40 0 0 1 102.6 43.6" fill="none" stroke="#000000" stroke-width="7" stroke-linecap="round"/>
+  <path d="M 40 68 L 88 68 L 64 106 Z" fill="#000000"/>
+  <circle cx="64" cy="54" r="30" fill="#000000"/></g>
+<g transform="translate(1324, 1324) scale(7.4) translate(-64, -60)"><path d="M 25.4 43.6 A 40 40 0 0 1 47.1 17.7" fill="none" stroke="#000000" stroke-width="7" stroke-linecap="round"/>
+  <path d="M 80.9 17.7 A 40 40 0 0 1 102.6 43.6" fill="none" stroke="#000000" stroke-width="7" stroke-linecap="round"/>
+  <path d="M 40 68 L 88 68 L 64 106 Z" fill="#000000"/>
+  <circle cx="64" cy="54" r="30" fill="#000000"/></g>
+<g transform="translate(1338, 1338) scale(7.4) translate(-64, -60)"><path d="M 25.4 43.6 A 40 40 0 0 1 47.1 17.7" fill="none" stroke="#000000" stroke-width="7" stroke-linecap="round"/>
+  <path d="M 80.9 17.7 A 40 40 0 0 1 102.6 43.6" fill="none" stroke="#000000" stroke-width="7" stroke-linecap="round"/>
+  <path d="M 40 68 L 88 68 L 64 106 Z" fill="#000000"/>
+  <circle cx="64" cy="54" r="30" fill="#000000"/></g>
+<g transform="translate(1352, 1352) scale(7.4) translate(-64, -60)"><path d="M 25.4 43.6 A 40 40 0 0 1 47.1 17.7" fill="none" stroke="#000000" stroke-width="7" stroke-linecap="round"/>
+  <path d="M 80.9 17.7 A 40 40 0 0 1 102.6 43.6" fill="none" stroke="#000000" stroke-width="7" stroke-linecap="round"/>
+  <path d="M 40 68 L 88 68 L 64 106 Z" fill="#000000"/>
+  <circle cx="64" cy="54" r="30" fill="#000000"/></g>
+<g transform="translate(1366, 1366) scale(7.4) translate(-64, -60)"><path d="M 25.4 43.6 A 40 40 0 0 1 47.1 17.7" fill="none" stroke="#000000" stroke-width="7" stroke-linecap="round"/>
+  <path d="M 80.9 17.7 A 40 40 0 0 1 102.6 43.6" fill="none" stroke="#000000" stroke-width="7" stroke-linecap="round"/>
+  <path d="M 40 68 L 88 68 L 64 106 Z" fill="#000000"/>
+  <circle cx="64" cy="54" r="30" fill="#000000"/></g>
+<g transform="translate(1380, 1380) scale(7.4) translate(-64, -60)"><path d="M 25.4 43.6 A 40 40 0 0 1 47.1 17.7" fill="none" stroke="#000000" stroke-width="7" stroke-linecap="round"/>
+  <path d="M 80.9 17.7 A 40 40 0 0 1 102.6 43.6" fill="none" stroke="#000000" stroke-width="7" stroke-linecap="round"/>
+  <path d="M 40 68 L 88 68 L 64 106 Z" fill="#000000"/>
+  <circle cx="64" cy="54" r="30" fill="#000000"/></g>
+<g transform="translate(1394, 1394) scale(7.4) translate(-64, -60)"><path d="M 25.4 43.6 A 40 40 0 0 1 47.1 17.7" fill="none" stroke="#000000" stroke-width="7" stroke-linecap="round"/>
+  <path d="M 80.9 17.7 A 40 40 0 0 1 102.6 43.6" fill="none" stroke="#000000" stroke-width="7" stroke-linecap="round"/>
+  <path d="M 40 68 L 88 68 L 64 106 Z" fill="#000000"/>
+  <circle cx="64" cy="54" r="30" fill="#000000"/></g>
+<g transform="translate(1408, 1408) scale(7.4) translate(-64, -60)"><path d="M 25.4 43.6 A 40 40 0 0 1 47.1 17.7" fill="none" stroke="#000000" stroke-width="7" stroke-linecap="round"/>
+  <path d="M 80.9 17.7 A 40 40 0 0 1 102.6 43.6" fill="none" stroke="#000000" stroke-width="7" stroke-linecap="round"/>
+  <path d="M 40 68 L 88 68 L 64 106 Z" fill="#000000"/>
+  <circle cx="64" cy="54" r="30" fill="#000000"/></g>
+<g transform="translate(1422, 1422) scale(7.4) translate(-64, -60)"><path d="M 25.4 43.6 A 40 40 0 0 1 47.1 17.7" fill="none" stroke="#000000" stroke-width="7" stroke-linecap="round"/>
+  <path d="M 80.9 17.7 A 40 40 0 0 1 102.6 43.6" fill="none" stroke="#000000" stroke-width="7" stroke-linecap="round"/>
+  <path d="M 40 68 L 88 68 L 64 106 Z" fill="#000000"/>
+  <circle cx="64" cy="54" r="30" fill="#000000"/></g>
+<g transform="translate(1436, 1436) scale(7.4) translate(-64, -60)"><path d="M 25.4 43.6 A 40 40 0 0 1 47.1 17.7" fill="none" stroke="#000000" stroke-width="7" stroke-linecap="round"/>
+  <path d="M 80.9 17.7 A 40 40 0 0 1 102.6 43.6" fill="none" stroke="#000000" stroke-width="7" stroke-linecap="round"/>
+  <path d="M 40 68 L 88 68 L 64 106 Z" fill="#000000"/>
+  <circle cx="64" cy="54" r="30" fill="#000000"/></g>
+<g transform="translate(1450, 1450) scale(7.4) translate(-64, -60)"><path d="M 25.4 43.6 A 40 40 0 0 1 47.1 17.7" fill="none" stroke="#000000" stroke-width="7" stroke-linecap="round"/>
+  <path d="M 80.9 17.7 A 40 40 0 0 1 102.6 43.6" fill="none" stroke="#000000" stroke-width="7" stroke-linecap="round"/>
+  <path d="M 40 68 L 88 68 L 64 106 Z" fill="#000000"/>
+  <circle cx="64" cy="54" r="30" fill="#000000"/></g>
+<g transform="translate(1464, 1464) scale(7.4) translate(-64, -60)"><path d="M 25.4 43.6 A 40 40 0 0 1 47.1 17.7" fill="none" stroke="#000000" stroke-width="7" stroke-linecap="round"/>
+  <path d="M 80.9 17.7 A 40 40 0 0 1 102.6 43.6" fill="none" stroke="#000000" stroke-width="7" stroke-linecap="round"/>
+  <path d="M 40 68 L 88 68 L 64 106 Z" fill="#000000"/>
+  <circle cx="64" cy="54" r="30" fill="#000000"/></g>
+<g transform="translate(1478, 1478) scale(7.4) translate(-64, -60)"><path d="M 25.4 43.6 A 40 40 0 0 1 47.1 17.7" fill="none" stroke="#000000" stroke-width="7" stroke-linecap="round"/>
+  <path d="M 80.9 17.7 A 40 40 0 0 1 102.6 43.6" fill="none" stroke="#000000" stroke-width="7" stroke-linecap="round"/>
+  <path d="M 40 68 L 88 68 L 64 106 Z" fill="#000000"/>
+  <circle cx="64" cy="54" r="30" fill="#000000"/></g>
+<g transform="translate(1492, 1492) scale(7.4) translate(-64, -60)"><path d="M 25.4 43.6 A 40 40 0 0 1 47.1 17.7" fill="none" stroke="#000000" stroke-width="7" stroke-linecap="round"/>
+  <path d="M 80.9 17.7 A 40 40 0 0 1 102.6 43.6" fill="none" stroke="#000000" stroke-width="7" stroke-linecap="round"/>
+  <path d="M 40 68 L 88 68 L 64 106 Z" fill="#000000"/>
+  <circle cx="64" cy="54" r="30" fill="#000000"/></g>
+</g>
+  <g transform="translate(512, 512) scale(7.4) translate(-64, -60)">
+    <path d="M 25.4 43.6 A 40 40 0 0 1 47.1 17.7" fill="none" stroke="#1E2126" stroke-width="7" stroke-linecap="round"/>
+  <path d="M 80.9 17.7 A 40 40 0 0 1 102.6 43.6" fill="none" stroke="#1E2126" stroke-width="7" stroke-linecap="round"/>
+  <path d="M 40 68 L 88 68 L 64 106 Z" fill="#D7DF23"/>
+  <circle cx="64" cy="54" r="30" fill="#1E2126"/>
+  <g transform="translate(64, 54) rotate(42)"><path d="M 0 -15 L 10.5 12 L 0 5.5 L -10.5 12 Z" fill="#2B9FD8"/></g>
   </g>
 </svg>

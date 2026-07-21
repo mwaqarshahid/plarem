@@ -1,3 +1,4 @@
+export { BRAND } from './brand';
 export { CATEGORIES, getCategoryMeta, type CategoryMeta } from './categories';
 export {
   DEFAULT_RADIUS_METERS,
@@ -21,3 +22,4 @@ export {
   REMINDER_CHANNEL_ID,
   type PermissionLabelState,
 } from './config';
+export { ONBOARDING } from './onboarding';

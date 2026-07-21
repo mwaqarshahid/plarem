@@ -1,5 +1,13 @@
 import React, { useState } from 'react';
-import { Modal, Platform, ScrollView, StyleSheet, Text, View, ViewStyle } from 'react-native';
+import {
+  Modal,
+  Platform,
+  ScrollView,
+  StyleSheet,
+  Text,
+  View,
+  ViewStyle,
+} from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useTheme, type ThemeColors } from '@theme';
 import {
@@ -12,7 +20,8 @@ import {
   setCachedLocation,
   warmUpLocation,
 } from '@services';
-import { APP_MOTTO, APP_NAME, APP_TAGLINE } from '@constants';
+import { APP_MOTTO, APP_NAME, ONBOARDING } from '@constants';
+import { BrandLogo } from './BrandLogo';
 import { Button } from './Button';
 import { Card } from './Card';
 import { Icon } from './Icon';
@@ -34,7 +43,9 @@ const stepDotStyle = (active: boolean, colors: ThemeColors): ViewStyle => ({
   opacity: active ? 1 : 0.45,
 });
 
-export const PermissionsOnboarding: React.FC<PermissionsOnboardingProps> = ({ onComplete }) => {
+export const PermissionsOnboarding: React.FC<PermissionsOnboardingProps> = ({
+  onComplete,
+}) => {
   const theme = useTheme();
   const insets = useSafeAreaInsets();
   const [step, setStep] = useState<Step>('welcome');
@@ -114,21 +125,29 @@ export const PermissionsOnboarding: React.FC<PermissionsOnboardingProps> = ({ on
             paddingTop: insets.top + 16,
             paddingBottom: insets.bottom + 16,
           },
-        ]}>
-        <ScrollView contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
+        ]}
+      >
+        <ScrollView
+          contentContainerStyle={styles.content}
+          showsVerticalScrollIndicator={false}
+        >
           <View style={styles.brandRow}>
-            <View
-              style={[
-                styles.brandIcon,
-                { backgroundColor: theme.colors.primaryContainer, borderRadius: theme.radius.lg },
-              ]}>
-              <Icon name="map-marker-radius" size={32} color={theme.colors.primary} />
-            </View>
+            <BrandLogo size={56} />
             <View style={styles.brandText}>
-              <Text style={[theme.typography.headlineMedium, { color: theme.colors.onSurface }]}>
+              <Text
+                style={[
+                  theme.typography.headlineMedium,
+                  { color: theme.colors.onSurface },
+                ]}
+              >
                 {APP_NAME}
               </Text>
-              <Text style={[theme.typography.bodySmall, { color: theme.colors.onSurfaceVariant }]}>
+              <Text
+                style={[
+                  theme.typography.bodySmall,
+                  { color: theme.colors.onSurfaceVariant },
+                ]}
+              >
                 {APP_MOTTO}
               </Text>
             </View>
@@ -136,30 +155,34 @@ export const PermissionsOnboarding: React.FC<PermissionsOnboardingProps> = ({ on
 
           {step === 'welcome' ? (
             <Card style={styles.card}>
-              <Text style={[theme.typography.titleLarge, { color: theme.colors.onSurface }]}>
-                Welcome to {APP_NAME}
+              <Text
+                style={[
+                  theme.typography.titleLarge,
+                  { color: theme.colors.onSurface },
+                ]}
+              >
+                {ONBOARDING.welcome.title}
               </Text>
-              <Text style={[theme.typography.bodyMedium, styles.body, { color: theme.colors.onSurfaceVariant }]}>
-                {APP_TAGLINE}. To work properly, Plarem needs a few permissions on your device.
+              <Text
+                style={[
+                  theme.typography.bodyMedium,
+                  styles.body,
+                  { color: theme.colors.onSurfaceVariant },
+                ]}
+              >
+                {ONBOARDING.welcome.body}
               </Text>
-              <FeatureRow
-                icon="map-marker-outline"
-                title="Location"
-                description="Know when you arrive at a place you chose"
-              />
-              <FeatureRow
-                icon="map-marker-radius-outline"
-                title="Background location"
-                description="Trigger reminders even when the app is closed"
-              />
-              <FeatureRow
-                icon="bell-outline"
-                title="Notifications"
-                description="Alert you the moment a reminder fires"
-              />
+              {ONBOARDING.welcome.features.map(feature => (
+                <FeatureRow
+                  key={feature.title}
+                  icon={feature.icon}
+                  title={feature.title}
+                  description={feature.description}
+                />
+              ))}
               <Button
                 testID="onboarding-continue"
-                label="Continue"
+                label={ONBOARDING.welcome.continueLabel}
                 icon="arrow-right"
                 onPress={goNext}
               />
@@ -168,22 +191,33 @@ export const PermissionsOnboarding: React.FC<PermissionsOnboardingProps> = ({ on
 
           {step === 'location' ? (
             <Card style={styles.card}>
-              <Text style={[theme.typography.titleLarge, { color: theme.colors.onSurface }]}>
-                Allow location access
+              <Text
+                style={[
+                  theme.typography.titleLarge,
+                  { color: theme.colors.onSurface },
+                ]}
+              >
+                {ONBOARDING.location.title}
               </Text>
-              <Text style={[theme.typography.bodyMedium, styles.body, { color: theme.colors.onSurfaceVariant }]}>
-                Plarem uses your location on-device to detect geofence arrivals. Nothing is uploaded.
+              <Text
+                style={[
+                  theme.typography.bodyMedium,
+                  styles.body,
+                  { color: theme.colors.onSurfaceVariant },
+                ]}
+              >
+                {ONBOARDING.location.body}
               </Text>
               <Button
                 testID="onboarding-allow-location"
-                label="Allow while using the app"
+                label={ONBOARDING.location.allowLabel}
                 icon="crosshairs-gps"
                 onPress={grantForeground}
                 loading={busy}
               />
               <Button
                 testID="onboarding-skip-location"
-                label="Not now"
+                label={ONBOARDING.location.skipLabel}
                 variant="ghost"
                 onPress={goNext}
                 disabled={busy}
@@ -193,23 +227,33 @@ export const PermissionsOnboarding: React.FC<PermissionsOnboardingProps> = ({ on
 
           {step === 'background' ? (
             <Card style={styles.card}>
-              <Text style={[theme.typography.titleLarge, { color: theme.colors.onSurface }]}>
-                Allow all the time
+              <Text
+                style={[
+                  theme.typography.titleLarge,
+                  { color: theme.colors.onSurface },
+                ]}
+              >
+                {ONBOARDING.background.title}
               </Text>
-              <Text style={[theme.typography.bodyMedium, styles.body, { color: theme.colors.onSurfaceVariant }]}>
-                For reminders to fire in the background, Android needs &quot;Allow all the time&quot; location
-                access. You can change this later in Settings.
+              <Text
+                style={[
+                  theme.typography.bodyMedium,
+                  styles.body,
+                  { color: theme.colors.onSurfaceVariant },
+                ]}
+              >
+                {ONBOARDING.background.body}
               </Text>
               <Button
                 testID="onboarding-allow-background"
-                label="Allow all the time"
+                label={ONBOARDING.background.allowLabel}
                 icon="map-marker-radius"
                 onPress={grantBackground}
                 loading={busy}
               />
               <Button
                 testID="onboarding-skip-background"
-                label="Skip for now"
+                label={ONBOARDING.background.skipLabel}
                 variant="ghost"
                 onPress={goNext}
                 disabled={busy}
@@ -219,23 +263,33 @@ export const PermissionsOnboarding: React.FC<PermissionsOnboardingProps> = ({ on
 
           {step === 'battery' ? (
             <Card style={styles.card}>
-              <Text style={[theme.typography.titleLarge, { color: theme.colors.onSurface }]}>
-                Keep reminders running
+              <Text
+                style={[
+                  theme.typography.titleLarge,
+                  { color: theme.colors.onSurface },
+                ]}
+              >
+                {ONBOARDING.battery.title}
               </Text>
-              <Text style={[theme.typography.bodyMedium, styles.body, { color: theme.colors.onSurfaceVariant }]}>
-                Some phones aggressively close background apps to save battery, which can stop
-                reminders from firing. Allow Plarem to keep monitoring so arrivals are never missed.
+              <Text
+                style={[
+                  theme.typography.bodyMedium,
+                  styles.body,
+                  { color: theme.colors.onSurfaceVariant },
+                ]}
+              >
+                {ONBOARDING.battery.body}
               </Text>
               <Button
                 testID="onboarding-allow-battery"
-                label="Allow background activity"
+                label={ONBOARDING.battery.allowLabel}
                 icon="battery-heart-variant"
                 onPress={grantBattery}
                 loading={busy}
               />
               <Button
                 testID="onboarding-skip-battery"
-                label="Skip for now"
+                label={ONBOARDING.battery.skipLabel}
                 variant="ghost"
                 onPress={goNext}
                 disabled={busy}
@@ -245,22 +299,33 @@ export const PermissionsOnboarding: React.FC<PermissionsOnboardingProps> = ({ on
 
           {step === 'notifications' ? (
             <Card style={styles.card}>
-              <Text style={[theme.typography.titleLarge, { color: theme.colors.onSurface }]}>
-                Allow notifications
+              <Text
+                style={[
+                  theme.typography.titleLarge,
+                  { color: theme.colors.onSurface },
+                ]}
+              >
+                {ONBOARDING.notifications.title}
               </Text>
-              <Text style={[theme.typography.bodyMedium, styles.body, { color: theme.colors.onSurfaceVariant }]}>
-                Get notified the moment you arrive at a reminder location.
+              <Text
+                style={[
+                  theme.typography.bodyMedium,
+                  styles.body,
+                  { color: theme.colors.onSurfaceVariant },
+                ]}
+              >
+                {ONBOARDING.notifications.body}
               </Text>
               <Button
                 testID="onboarding-allow-notifications"
-                label="Allow notifications"
+                label={ONBOARDING.notifications.allowLabel}
                 icon="bell-ring-outline"
                 onPress={grantNotifications}
                 loading={busy}
               />
               <Button
                 testID="onboarding-skip-notifications"
-                label="Skip for now"
+                label={ONBOARDING.notifications.skipLabel}
                 variant="ghost"
                 onPress={finish}
                 disabled={busy}
@@ -282,18 +347,27 @@ export const PermissionsOnboarding: React.FC<PermissionsOnboardingProps> = ({ on
   );
 };
 
-const FeatureRow: React.FC<{ icon: string; title: string; description: string }> = ({
-  icon,
-  title,
-  description,
-}) => {
+const FeatureRow: React.FC<{
+  icon: string;
+  title: string;
+  description: string;
+}> = ({ icon, title, description }) => {
   const theme = useTheme();
   return (
     <View style={styles.featureRow}>
       <Icon name={icon} size={22} color={theme.colors.primary} />
       <View style={styles.featureText}>
-        <Text style={[theme.typography.titleMedium, { color: theme.colors.onSurface }]}>{title}</Text>
-        <Text style={[theme.typography.bodySmall, { color: theme.colors.onSurfaceVariant }]}>
+        <Text
+          style={[theme.typography.titleMedium, { color: theme.colors.onSurface }]}
+        >
+          {title}
+        </Text>
+        <Text
+          style={[
+            theme.typography.bodySmall,
+            { color: theme.colors.onSurfaceVariant },
+          ]}
+        >
           {description}
         </Text>
       </View>
@@ -315,12 +389,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 14,
-  },
-  brandIcon: {
-    width: 56,
-    height: 56,
-    alignItems: 'center',
-    justifyContent: 'center',
   },
   brandText: {
     flex: 1,

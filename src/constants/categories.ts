@@ -1,4 +1,5 @@
 import { CategoryId } from '@types';
+import { BRAND } from './brand';
 
 export interface CategoryMeta {
   id: CategoryId;
@@ -7,16 +8,17 @@ export interface CategoryMeta {
   color: string;
 }
 
+/** Category accents drawn from the brand palette (arrow / ink / lime / tile). */
 export const CATEGORIES: CategoryMeta[] = [
-  { id: 'shopping', label: 'Shopping', icon: 'cart-outline', color: '#4F5BE8' },
-  { id: 'personal', label: 'Personal', icon: 'account-outline', color: '#00A98F' },
-  { id: 'office', label: 'Office', icon: 'briefcase-outline', color: '#E8930C' },
-  { id: 'health', label: 'Health', icon: 'heart-pulse', color: '#DC3A45' },
-  { id: 'travel', label: 'Travel', icon: 'airplane', color: '#0E9FD8' },
-  { id: 'bills', label: 'Bills', icon: 'file-document-outline', color: '#8E44AD' },
-  { id: 'friends', label: 'Friends', icon: 'account-group-outline', color: '#1F9D5B' },
-  { id: 'family', label: 'Family', icon: 'home-heart', color: '#E85B8A' },
-  { id: 'custom', label: 'Custom', icon: 'tag-outline', color: '#5C6070' },
+  { id: 'shopping', label: 'Shopping', icon: 'cart-outline', color: BRAND.arrow },
+  { id: 'personal', label: 'Personal', icon: 'account-outline', color: BRAND.ink },
+  { id: 'office', label: 'Office', icon: 'briefcase-outline', color: BRAND.tileDark },
+  { id: 'health', label: 'Health', icon: 'heart-pulse', color: '#C94B5A' },
+  { id: 'travel', label: 'Travel', icon: 'airplane', color: '#3AA8D8' },
+  { id: 'bills', label: 'Bills', icon: 'file-document-outline', color: BRAND.tileLight },
+  { id: 'friends', label: 'Friends', icon: 'account-group-outline', color: '#8FA81A' },
+  { id: 'family', label: 'Family', icon: 'home-heart', color: '#B8A014' },
+  { id: 'custom', label: 'Custom', icon: 'tag-outline', color: '#6B7280' },
 ];
 
 export const getCategoryMeta = (id: CategoryId): CategoryMeta =>

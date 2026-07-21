@@ -1,4 +1,5 @@
 import type { Region } from 'react-native-maps';
+import identity from '../../brand/identity.json';
 import {
   APP_VERSION as GENERATED_APP_VERSION,
   GOOGLE_MAPS_API_KEY as GENERATED_GOOGLE_MAPS_API_KEY,
@@ -7,14 +8,16 @@ import {
 /** Stamped from package.json (the single source of truth) by scripts/sync-env.js. */
 export const APP_VERSION = GENERATED_APP_VERSION;
 
-export const APP_NAME = 'Plarem';
+// Brand identity comes from brand/identity.json — the single source of truth
+// shared with the brand-asset generator (scripts/generate-brand-assets.js).
+export const APP_NAME = identity.name;
 
-export const APP_TAGLINE = 'Play a Reminder on Arrival';
+export const APP_TAGLINE = identity.tagline;
 
-export const APP_MOTTO = 'Arrive. Remember.';
+export const APP_MOTTO = identity.motto;
 
 export const APP_PRIVACY_NOTE =
-  'Reminders are stored locally on this device. Location is only used on-device to trigger geofences; nothing is uploaded.';
+  'Reminders are stored locally on this device. Location is only used on-device to trigger geofences. Nothing is uploaded.';
 
 /**
  * Google Maps Platform API key for Places search and Geocoding HTTP calls.

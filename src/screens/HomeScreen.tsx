@@ -1,11 +1,28 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { FlatList, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import {
+  FlatList,
+  Pressable,
+  ScrollView,
+  StyleSheet,
+  View,
+} from 'react-native';
 import { useTheme } from '@theme';
 import { useAppDispatch, useAppSelector } from '@hooks';
-import { FilterId, filterReminders, selectReminders, updateReminder } from '@store';
+import {
+  FilterId,
+  filterReminders,
+  selectReminders,
+  updateReminder,
+} from '@store';
 import { Coordinates, getCachedLocation, warmUpLocation } from '@services';
-import { Chip, EmptyState, Icon, ReminderCard, TextField } from '@components';
+import {
+  Chip,
+  EmptyState,
+  Icon,
+  ReminderCard,
+  ScreenHeader,
+  TextField,
+} from '@components';
 import type { MainTabScreenProps } from '@navigation/types';
 
 const ListSeparator: React.FC = () => <View style={styles.separator} />;
@@ -21,9 +38,10 @@ const FILTERS: { id: FilterId; label: string; icon?: string }[] = [
   { id: 'disabled', label: 'Disabled' },
 ];
 
-export const HomeScreen: React.FC<MainTabScreenProps<'Home'>> = ({ navigation }) => {
+export const HomeScreen: React.FC<MainTabScreenProps<'Home'>> = ({
+  navigation,
+}) => {
   const theme = useTheme();
-  const insets = useSafeAreaInsets();
   const dispatch = useAppDispatch();
   const reminders = useAppSelector(selectReminders);
 
@@ -51,28 +69,26 @@ export const HomeScreen: React.FC<MainTabScreenProps<'Home'>> = ({ navigation })
 
   const handleToggle = (id: string, active: boolean): void => {
     dispatch(
-      updateReminder({ id, changes: { status: active ? 'pending' : 'disabled' } }),
+      updateReminder({
+        id,
+        changes: { status: active ? 'pending' : 'disabled' },
+      }),
     );
   };
 
   return (
     <View
       testID="home-screen"
-      style={[styles.container, { backgroundColor: theme.colors.background, paddingTop: insets.top }]}>
-      <View style={styles.header}>
-        <View>
-          <Text
-            testID="home-title"
-            style={[theme.typography.headlineMedium, { color: theme.colors.onSurface }]}>
-            Plarem
-          </Text>
-          <Text
-            testID="home-active-count"
-            style={[theme.typography.bodySmall, { color: theme.colors.onSurfaceVariant }]}>
-            {reminders.filter(r => r.status === 'pending').length} active reminders
-          </Text>
-        </View>
-      </View>
+      style={[styles.container, { backgroundColor: theme.colors.background }]}
+    >
+      <ScreenHeader
+        title="Plarem"
+        titleTestID="home-title"
+        subtitle={`${
+          reminders.filter(r => r.status === 'pending').length
+        } active reminders`}
+        subtitleTestID="home-active-count"
+      />
 
       <View style={styles.searchWrapper}>
         <TextField
@@ -89,7 +105,8 @@ export const HomeScreen: React.FC<MainTabScreenProps<'Home'>> = ({ navigation })
           horizontal
           showsHorizontalScrollIndicator={false}
           contentContainerStyle={styles.filters}
-          testID="home-filters">
+          testID="home-filters"
+        >
           {FILTERS.map(f => (
             <Chip
               key={f.id}
@@ -112,14 +129,18 @@ export const HomeScreen: React.FC<MainTabScreenProps<'Home'>> = ({ navigation })
         renderItem={({ item }) => (
           <ReminderCard
             reminder={item}
-            onPress={() => navigation.navigate('ReminderDetails', { reminderId: item.id })}
+            onPress={() =>
+              navigation.navigate('ReminderDetails', { reminderId: item.id })
+            }
             onToggleActive={active => handleToggle(item.id, active)}
           />
         )}
         ListEmptyComponent={
           <EmptyState
-            icon="map-marker-radius-outline"
-            title={reminders.length === 0 ? 'No reminders yet' : 'Nothing matches'}
+            brand
+            title={
+              reminders.length === 0 ? 'No reminders yet' : 'Nothing matches'
+            }
             message={
               reminders.length === 0
                 ? 'Create your first location reminder and Plarem will notify you when you arrive.'
@@ -133,11 +154,16 @@ export const HomeScreen: React.FC<MainTabScreenProps<'Home'>> = ({ navigation })
         testID="home-fab"
         accessibilityLabel="Create reminder"
         onPress={() => navigation.navigate('ReminderForm')}
-        android_ripple={{ color: theme.colors.ripple }}
-        style={[
+        // No android_ripple — keeps the circular shape on press.
+        style={({ pressed }) => [
           styles.fab,
-          { backgroundColor: theme.colors.primary, borderRadius: theme.radius.xl },
-        ]}>
+          {
+            backgroundColor: theme.colors.primary,
+            borderRadius: theme.radius.pill,
+            opacity: pressed ? 0.82 : 1,
+          },
+        ]}
+      >
         <Icon name="plus" size={28} color={theme.colors.onPrimary} />
       </Pressable>
     </View>
@@ -147,14 +173,6 @@ export const HomeScreen: React.FC<MainTabScreenProps<'Home'>> = ({ navigation })
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-  },
-  header: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingHorizontal: 20,
-    paddingTop: 12,
-    paddingBottom: 4,
   },
   searchWrapper: {
     paddingHorizontal: 20,

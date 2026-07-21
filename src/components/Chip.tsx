@@ -12,7 +12,14 @@ interface ChipProps {
   testID?: string;
 }
 
-export const Chip: React.FC<ChipProps> = ({ label, selected, onPress, icon, color, testID }) => {
+export const Chip: React.FC<ChipProps> = ({
+  label,
+  selected,
+  onPress,
+  icon,
+  color,
+  testID,
+}) => {
   const theme = useTheme();
   const accent = color ?? theme.colors.primary;
   const background = selected ? accent : theme.colors.surfaceVariant;
@@ -27,13 +34,20 @@ export const Chip: React.FC<ChipProps> = ({ label, selected, onPress, icon, colo
       testID={testID}
       accessibilityLabel={label}
       onPress={onPress}
-      android_ripple={{ color: theme.colors.ripple }}
-      style={[
+      // No android_ripple — keeps the pill shape on press (Samsung OEMs).
+      style={({ pressed }) => [
         styles.chip,
-        { backgroundColor: background, borderRadius: theme.radius.pill },
-      ]}>
+        {
+          backgroundColor: background,
+          borderRadius: theme.radius.pill,
+          opacity: pressed && onPress ? 0.82 : 1,
+        },
+      ]}
+    >
       {icon ? <Icon name={icon} size={16} color={foreground} /> : null}
-      <Text style={[theme.typography.labelLarge, { color: foreground }]}>{label}</Text>
+      <Text style={[theme.typography.labelLarge, { color: foreground }]}>
+        {label}
+      </Text>
     </Pressable>
   );
 };
@@ -45,6 +59,5 @@ const styles = StyleSheet.create({
     gap: 6,
     paddingHorizontal: 14,
     paddingVertical: 8,
-    overflow: 'hidden',
   },
 });

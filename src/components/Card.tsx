@@ -10,7 +10,13 @@ interface CardProps {
   testID?: string;
 }
 
-export const Card: React.FC<CardProps> = ({ children, onPress, onLongPress, style, testID }) => {
+export const Card: React.FC<CardProps> = ({
+  children,
+  onPress,
+  onLongPress,
+  style,
+  testID,
+}) => {
   const theme = useTheme();
   const cardStyle = [
     styles.card,
@@ -35,8 +41,9 @@ export const Card: React.FC<CardProps> = ({ children, onPress, onLongPress, styl
       testID={testID}
       onPress={onPress}
       onLongPress={onLongPress}
-      android_ripple={{ color: theme.colors.ripple }}
-      style={({ pressed }) => [...cardStyle, { opacity: pressed ? 0.92 : 1 }]}>
+      // No android_ripple — keeps rounded corners on press.
+      style={({ pressed }) => [...cardStyle, { opacity: pressed ? 0.92 : 1 }]}
+    >
       {children}
     </Pressable>
   );
@@ -46,6 +53,5 @@ const styles = StyleSheet.create({
   card: {
     padding: 16,
     borderWidth: StyleSheet.hairlineWidth,
-    overflow: 'hidden',
   },
 });
