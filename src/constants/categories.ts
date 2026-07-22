@@ -11,7 +11,7 @@ export interface CategoryMeta {
 /** Category accents drawn from the brand palette (arrow / ink / lime / tile). */
 export const CATEGORIES: CategoryMeta[] = [
   { id: 'shopping', label: 'Shopping', icon: 'cart-outline', color: BRAND.arrow },
-  { id: 'personal', label: 'Personal', icon: 'account-outline', color: BRAND.ink },
+  { id: 'personal', label: 'Personal', icon: 'account-outline', color: '#6E8496' },
   { id: 'office', label: 'Office', icon: 'briefcase-outline', color: BRAND.tileDark },
   { id: 'health', label: 'Health', icon: 'heart-pulse', color: '#C94B5A' },
   { id: 'travel', label: 'Travel', icon: 'airplane', color: '#3AA8D8' },
