@@ -75,6 +75,22 @@ The same `.env` value is synced at build time into generated, gitignored files (
 npm run android
 ```
 
+### Play Store release (Android App Bundle)
+
+1. Create the upload keystore once (gitignored; back it up offline):
+
+```bash
+npm run android:keystore
+```
+
+2. Ensure `.env` has a valid `GOOGLE_MAPS_API_KEY`, then build and copy the AAB:
+
+```bash
+npm run android:bundle:dist
+```
+
+Upload `dist/plarem-<version>-release.aab` in [Play Console](https://play.google.com/console). Restrict the Maps Android key to package `com.plarem` plus the upload-key SHA-1 printed by `android:keystore` (and later Play App Signing’s SHA-1).
+
 ### Run (iOS, on macOS)
 
 ```bash
