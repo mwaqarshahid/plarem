@@ -161,6 +161,7 @@ The app requests these during onboarding, and the Settings screen shows their cu
 ## Testing geofences
 
 - Android emulator: set a route or single location in the emulator's Extended Controls → Location. Drive a **route** (not a single teleport) so the foreground service and the software fallback both get a stream of fixes.
+- Android device: create a reminder at a place you can walk or drive to (radius ≥ 100 m), grant **Allow all the time** location, notifications, and battery-exemption during onboarding, then leave the fence and re-enter it with the app backgrounded or closed. Keep the monitoring notification visible if Android shows one — that means the foreground service is alive. A real movement path works far better than standing still or teleporting via mock GPS (OEM mock location is often unreliable).
 - With the foreground service active, transitions typically fire within seconds; without an active location client, Play Services geofencing alone can lag several minutes or miss a drive-through entirely.
 - Radii below ~100 m are unreliable outdoors; presets start at 100 m.
 - Confirm registration: `syncGeofences` records a `GeofenceSyncReport` (see `getLastGeofenceSyncReport`) listing any reminders the OS refused to arm.
