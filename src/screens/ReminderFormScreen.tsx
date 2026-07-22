@@ -36,7 +36,7 @@ export const ReminderFormScreen: React.FC<RootStackScreenProps<'ReminderForm'>> 
 
   const [location, setLocation] = useState(existing?.location);
   const [radius, setRadius] = useState(existing?.radius ?? RADIUS_PRESETS[1]);
-  const [category, setCategory] = useState<CategoryId>(existing?.category ?? 'personal');
+  const [category, setCategory] = useState<CategoryId>(existing?.category ?? 'shopping');
   const [customCategory, setCustomCategory] = useState(existing?.customCategory ?? '');
   const [repeat, setRepeat] = useState<ReminderRepeat>(existing?.repeat ?? 'once');
   const [titleError, setTitleError] = useState<string | undefined>();
