@@ -1,10 +1,10 @@
-# Plarem - Play a Reminder on Arrival
+# Plarem - Place Reminder, then Play it on Arrival
 
 Plarem is a location-based reminder app for Android and iOS built with React Native. Attach a task to a place and Plarem notifies you the moment you arrive. The location itself becomes the trigger.
 
 ## How it works
 
-1. You create a reminder with a title, location, and arrival radius.
+1. You create a reminder with a title, location and arrival radius.
 2. Plarem registers a **geofence with the operating system** (Google Play Services `GeofencingClient` on Android, `CLLocationManager` region monitoring on iOS).
 3. While you have active reminders, Android runs a **low-power foreground location service** (`FusedLocationProviderClient`, balanced-power). This keeps the process alive and feeds the OS fresh fixes so geofence transitions fire within seconds instead of being missed while you drive through a fence. A software distance-check runs off the same location stream as a fallback, independent of Play Services.
 4. When the device enters the radius — even if the app is closed — Plarem is woken in the background (headless JS on Android) and a local notification is shown via Notifee.
